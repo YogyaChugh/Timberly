@@ -47,7 +47,6 @@ else:
         a_data = eval(data)
     tdata = a_data['Users']
     for p in tdata:
-        print(tdata)
         users.append(User(p,eval(tdata[p])[0],int(eval(tdata[p])[1])))
 app = flask.Flask(__name__)
 
@@ -78,7 +77,6 @@ def get_leaderboard():
     user_index = 0
     i = 1
     final = []
-    print('reached here')
     for user in users:
         if i<=4:
             final.append([i,user.name,user.score])
@@ -86,15 +84,13 @@ def get_leaderboard():
             user_found = user
             user_index = i
         i+=1
-    print('even here')
     if user_index>4:
         if user_found:
             us = [user_index, user_found.name, user_found.score]
             final.append(us)
-            print(final)
             return final
         else:
-            requests.post("http://localhost:5000/register_user",data={'id': id,'name': name})
+            requests.post("https://yogya.pythonanywhere.com/register_user",data={'id': id,'name': name})
             return ""
     else:
         return final
@@ -113,7 +109,7 @@ def score():
     for user in users:
         if id == user.id:
             return str(user.score)
-    return "0"
+    return ""
 
 
 @app.post("/update_score")

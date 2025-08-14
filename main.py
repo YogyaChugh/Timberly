@@ -76,6 +76,15 @@ else:
         else:
             USER_ID = random.randint(100000,9999999)
             show_name_input = True
+            
+            
+#audio
+pygame.mixer.music.load("assets/audio/magic_forest.wav")
+pygame.mixer.music.play(-1)
+dead_sound = pygame.mixer.Sound("assets/audio/dead.wav")
+time_up_sound = pygame.mixer.Sound("assets/audio/time_up.wav")
+chop_sound = pygame.mixer.Sound("assets/audio/chop.wav")
+
 
 # Image loads
 bg = pygame.image.load("assets/bg.png")
@@ -112,8 +121,17 @@ slack = pygame.image.load('assets/slack.png')
 watching_man = pygame.image.load("assets/watching_man.png")
 tick = pygame.image.load("assets/tick.png")
 cloud = pygame.image.load("assets/cloud.png")
+cloud = pygame.transform.rotate(cloud,347)
 leaderboard_img = pygame.image.load("assets/leaderboard.png")
+info_panel = pygame.image.load("assets/info_panel2.png")
 aleft = pygame.image.load("assets/leftji.png")
+aright = pygame.transform.rotate(aleft,180)
+wave = pygame.image.load("assets/wave.png")
+info_icon = pygame.image.load("assets/info.png")
+info_icon_rect = info_icon.get_rect()
+info_icon_rect.topleft = (730, 130)
+
+volume = pygame.image.load("assets/volume.png")
 
 #fonts
 font2 = pygame.font.Font("assets/fonts/VarelaRound-Regular.ttf",24)
@@ -133,7 +151,7 @@ user_name1 = font4.render("Username",True,(255,255,255))
 note = font.render("NOTE",True,(255,255,255))
 text = font.render("Internet is required, the first time you run the application !!",True,(0,0,0))
 
-manager = pygame_textinput.TextInputManager(validator=lambda input: len(input) <= 15)
+manager = pygame_textinput.TextInputManager(validator=lambda input: len(input) <= 12)
 textinput = pygame_textinput.TextInputVisualizer(manager=manager, font_object=font4)
 
 textinput.font_color = (255, 255, 255)
@@ -162,6 +180,9 @@ val = 0
 credit = font.render("Credits",True,(0,0,0))
 credit_rect = credit.get_rect()
 credit_rect.topleft = (880,620)
+info = False
+timer_started = False
+SOUND = True
 
 def get_random_branch_status():
     global score
@@ -218,6 +239,7 @@ def generate_branch_locs():
 def load_game():
     global score, branch_locs,left,game_running, time_left,screen, just_game_over, squished, main_menu, show_name_input, leaderboard_screen
     screen.blit(bg, (0,0))
+    game_done = False
     if (branch_locs[0][0]=='left' and left==False) or (branch_locs[0][0]=='right' and left==True):
         game_running = False
         just_game_over = True
@@ -226,10 +248,7 @@ def load_game():
         main_menu = False
         show_name_input = False
         leaderboard_screen = False
-        pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
-        loading()
-        game_over_page()
-        return
+        game_done = True
     for i in branch_locs:
         if i[0]=='left':
             screen.blit(branch,i[1])
@@ -266,7 +285,18 @@ def load_game():
     pygame.draw.rect(screen,(55,55,55),(720,20,250,50),border_radius=5)
     pygame.draw.rect(screen,(255,255,255),(720,20,250,50),2,5)
     pygame.draw.rect(screen,(255, 234, 0),(725,25,time_left,40),border_radius=5)
+    if not timer_started:
+        textji = font.render("Press      or      to start !",True,(0,0,0))
+        screen.blit(textji,(650,580))
+        screen.blit(aleft,(737,585))
+        screen.blit(aright,(812,585))
+    textji2 = font2.render("Press 'Esc' to exit !",True,(0,0,0))
+    screen.blit(textji2,(20,630))
+    
     pygame.display.update()
+    if game_done:
+        loading()
+        game_over_page()
     
     
 def update_timer():
@@ -277,7 +307,7 @@ def update_timer():
     
     
 def reset():
-    global still_man, left, branch_locs, score, BASE_BRANCH_LOC, TOTAL_BRANCHES, time_left,transparency,just_game_over,main_menu,squished,doit,score_updated,is_there_a_problem, do_action
+    global still_man, left, branch_locs, score, BASE_BRANCH_LOC, TOTAL_BRANCHES, time_left,transparency,just_game_over,main_menu,squished,doit,score_updated,is_there_a_problem, do_action, timer_started
     still_man = True
     left = True
     do_action = False
@@ -293,6 +323,7 @@ def reset():
     doit = False
     score_updated = True
     is_there_a_problem = False
+    timer_started = False
     pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
     generate_branch_locs()
     
@@ -332,21 +363,19 @@ def main():
     screen.blit(board,(386,-20))
     screen.blit(smiling_man,(70,300))
     if USER_NAME is not None:
-        screen.blit(cloud,(0,110))
-        wood3 = pygame.transform.rotate(wood2,17)
-        screen.blit(wood3,(180,135))
-        hello = font.render("Hello,",True,(0,0,0))
-        hello = pygame.transform.rotate(hello,17)
-        name = font.render(USER_NAME+" !!",True,(0,0,0))
-        name = pygame.transform.rotate(name,17)
-        if len(USER_NAME+" !!")<10:
-            screen.blit(hello,(70,195))
-            screen.blit(name,(140,210))
+        screen.blit(cloud,(0,80))
+        # screen.blit(wood2,(180,135))
+        hello = font.render("Hello !",True,(0,0,0))
+        screen.blit(wave, (200,160))
+        name = font.render(USER_NAME,True,(0,0,0))
+        screen.blit(hello,(90,170))
+        if len(USER_NAME)<8:
+            screen.blit(name,(160,220))
         else:
-            screen.blit(hello,(60,195))
-            screen.blit(name,(90,198))
+            screen.blit(name,(110,220))
     
     # screen.blit(button,(480,100))
+    screen.blit(info_icon,info_icon_rect)
     pygame.draw.rect(screen,(169,122,87),(530,220,220,50),border_radius=5)
     pygame.draw.rect(screen,(79,32,15),(530,220,220,50),5,5)
     screen.blit(play,(600,228))
@@ -372,21 +401,23 @@ def main():
         
     try:
         if online_game:
-            bb = requests.get("http://localhost:5000/get_score",data={'id': USER_ID})
-            pygame.draw.rect(screen,(169,122,87),(20,10,300,60),border_radius=30)
-            pygame.draw.rect(screen,(79,32,15),(20,10,300,60),8,30)
-            offline = font.render(f"High Score: {eval(bb.content)}",True,(0,0,0))
-            if len(str(eval(bb.content)))==1:
-                screen.blit(offline,(67,22))
-            elif len(str(eval(bb.content)))==2:
-                screen.blit(offline,(57,22))
-            else:
-                screen.blit(offline,(47,22))
-            pygame.display.update()
+            bb = requests.get("https://yogya.pythonanywhere.com/get_score",data={'id': USER_ID})
+            if eval(bb.content) != "":
+                pygame.draw.rect(screen,(169,122,87),(20,10,300,60),border_radius=30)
+                pygame.draw.rect(screen,(79,32,15),(20,10,300,60),8,30)
+                offline = font.render(f"High Score: {eval(bb.content)}",True,(0,0,0))
+                if len(str(eval(bb.content)))==1:
+                    screen.blit(offline,(67,22))
+                elif len(str(eval(bb.content)))==2:
+                    screen.blit(offline,(57,22))
+                else:
+                    screen.blit(offline,(47,22))
+                pygame.display.update()
     except:
         pass
     
     screen.blit(credit,credit_rect)
+    pygame.draw.line(screen,(0,0,0),(credit_rect.x,credit_rect.y+32),(credit_rect.x+102,credit_rect.y+32),3)
     pygame.display.update()
 
 
@@ -394,6 +425,14 @@ def loading():
     pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
     screen.blit(main_menu_bg,(0,0))
     screen.blit(loading_man,(325,71))
+    pygame.display.update()
+    
+def information():
+    screen.blit(main_menu_bg,(0,0))
+    pygame.draw.rect(screen,(169,122,87),(20,20,70,50),border_radius=10)
+    pygame.draw.rect(screen,(79,32,15),(20,20,70,50),2,10)
+    screen.blit(aleft,(40,30))
+    screen.blit(info_panel,(-20,0))
     pygame.display.update()
 
 def leaderboard():
@@ -409,12 +448,11 @@ def leaderboard():
     pygame.display.update()
     fetched = True
     try:
-        content = eval(requests.get("http://localhost:5000/get_leaderboard",data={'id': USER_ID,'name': USER_NAME}).content)
+        content = eval(requests.get("https://yogya.pythonanywhere.com/get_leaderboard",data={'id': USER_ID,'name': USER_NAME}).content)
         screen.blit(leaderboard_img,(0,20))
         lead = font4.render("LEADERBOARD",True,(255,255,255))
         screen.blit(lead,(350,90))
         pygame.display.update()
-        print("Content: ", content)
         if content == "" or type(content)!=list                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 :
             fetched = False
             couldnt = font.render("Couldn't Fetch details ! Try Again Later !!", True, (0,0,0))
@@ -472,9 +510,7 @@ def leaderboard():
 
 
 def name_input():
-    main_menu_bg = pygame.image.load("assets/bgg.png")
-    main_menu_bg = pygame.transform.scale(main_menu_bg,(1000,667))
-    screen.blit(main_menu_bg,(0,0))
+    screen.blit(landing_bg,(0,0))
     
     pygame.draw.rect(screen,(169,122,87),(140,270,730,207),border_radius=30)
     pygame.draw.rect(screen,(79,32,15),(140,270,730,207),15,30)
@@ -498,6 +534,8 @@ while True:
         for event in events:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT and still_man:
+                    if not timer_started:
+                        timer_started = True
                     still_man = False
                     left = True
                     do_action = True
@@ -510,6 +548,8 @@ while True:
                     generate_branch_locs()
                     load_game()
                 elif event.key == pygame.K_RIGHT and still_man:
+                    if not timer_started:
+                        timer_started = True
                     still_man = False
                     left = False
                     do_action = True
@@ -521,6 +561,15 @@ while True:
                     pygame.time.set_timer(ANIMATE_LOG,1,10)
                     generate_branch_locs()
                     load_game()
+                elif event.key == pygame.K_ESCAPE:
+                    game_running = False
+                    just_game_over = True
+                    show_name_input = False
+                    leaderboard_screen = False
+                    game_done = True
+                    main_menu = True
+                    loading()
+                    main()
             if event.type == ANIMATE_MAN:
                 still_man = True
                 load_game()
@@ -534,11 +583,11 @@ while True:
                         log_location = [log_location[0]+10,log_location[1]+30]
                     else:
                         log_location = [log_location[0]-10,log_location[1]+30]
-        if time_left!=0:
+        if time_left!=0 and timer_started:
             time_left-=1
             if game_running:
                 update_timer()
-        else:
+        elif time_left==0:
             game_running = False
             just_game_over = True
             main_menu = False
@@ -557,11 +606,9 @@ while True:
                     file.write(str({'ID': USER_ID, 'NAME': USER_NAME, 'HIGH SCORE': HIGH_SCORE}))
             if doit:
                 doit = False
-                print('updating score')
                 try:
-                    t = requests.post("http://localhost:5000/update_score",data={'id': USER_ID, 'score': HIGH_SCORE})
+                    t = requests.post("https://yogya.pythonanywhere.com/update_score",data={'id': USER_ID, 'score': HIGH_SCORE})
                     if t.content == "":
-                        print('couldn"t do it bro')
                         is_there_a_problem = True
                         something = font2.render("Couldn't update score !",True,(0,0,0))
                         screen.blit(something,(320,580))
@@ -571,7 +618,6 @@ while True:
                         screen.blit(retry,(610,582))
                         pygame.display.update()
                 except:
-                    print('couldn"t do it bro')
                     is_there_a_problem = True
                     something = font2.render("Couldn't update score !",True,(0,0,0))
                     screen.blit(something,(320,580))
@@ -607,9 +653,9 @@ while True:
                     try:
                         pygame.draw.rect(screen,(169,122,87),(320,580,360,35))
                         something = font2.render("Retrying ...",True,(0,0,0))
-                        screen.blit(something,(400,580))
+                        screen.blit(something,(450,580))
                         pygame.display.update()
-                        t = requests.post("http://localhost:5000/update_score",data={'id': USER_ID, 'score': HIGH_SCORE})
+                        t = requests.post("https://yogya.pythonanywhere.com/update_score",data={'id': USER_ID, 'score': HIGH_SCORE})
                         if t.content == "":
                             is_there_a_problem = True
                             pygame.draw.rect(screen,(169,122,87),(320,580,360,35))
@@ -668,7 +714,7 @@ while True:
                     allow_textinput = False
                     show_name_input = False
                     try:
-                        requests.post("http://localhost:5000/register_user",data={'id': USER_ID,'name': textinput.value})
+                        requests.post("https://yogya.pythonanywhere.com/register_user",data={'id': USER_ID,'name': textinput.value})
                         with open(os.path.join(data_dir,"user.env"),'w') as file:
                             file.write(str({'ID': USER_ID, 'NAME': textinput.value, 'HIGH SCORE': HIGH_SCORE}))
                         USER_NAME = textinput.value
@@ -708,14 +754,9 @@ while True:
             if (pos[0]>r[0] and pos[0]<r[0]+r[2] and pos[1]>r[1] and pos[1]<r[1]+r[3]):
                 in_one = True
                 pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
-        if (credit_rect).collidepoint(pos[0],pos[1]):
+        if credit_rect.collidepoint(pos[0],pos[1]) or info_icon_rect.collidepoint(pos[0],pos[1]):
             in_one = True
             pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
-            pygame.draw.line(screen,(0,0,0),(credit_rect.x,credit_rect.y+30),(credit_rect.x+102,credit_rect.y+30),3)
-            pygame.display.update()
-        else:
-            screen.blit(main_menu_bg,(credit_rect.x,credit_rect.y+28,150,20),(credit_rect.x,credit_rect.y+30,102,20))
-            pygame.display.update()
         if not in_one:
             pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
         for event in events:
@@ -736,7 +777,12 @@ while True:
                 elif (event.pos[0]>560 and event.pos[0]<710 and event.pos[1]>483 and event.pos[1]<533):
                     webbrowser.open('https://hackclub.slack.com/team/U09218J0E94')
                 elif (credit_rect.collidepoint(event.pos[0],event.pos[1])):
-                    webbrowser.open('')
+                    webbrowser.open('https://timber-credits.onrender.com')
+                elif (info_icon_rect.collidepoint(event.pos[0],event.pos[1])):
+                    info = True
+                    reset()
+                    loading()
+                    information()
     if leaderboard_screen:
         pos = pygame.mouse.get_pos()
         if pos[0]>20 and pos[0]<90 and pos[1]>20 and pos[1]<70:
@@ -749,6 +795,21 @@ while True:
                     main_menu = True
                     leaderboard_screen = False
                     game_running = False
+                    loading()
+                    main()
+    if info:
+        pos = pygame.mouse.get_pos()
+        if pos[0]>20 and pos[0]<90 and pos[1]>20 and pos[1]<70:
+            pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
+        else:
+            pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
+        for event in events:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.pos[0]>20 and event.pos[0]<90 and event.pos[1]>20 and event.pos[1]<70:
+                    main_menu = True
+                    leaderboard_screen = False
+                    game_running = False
+                    info = False
                     loading()
                     main()
                     
