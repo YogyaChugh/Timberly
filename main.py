@@ -20,14 +20,13 @@ clock = pygame.time.Clock()
 
 font = pygame.font.Font("assets/fonts/VarelaRound-Regular.ttf",30)
 loading_man = pygame.image.load("assets/loading.png")
-loading_man = pygame.transform.scale(loading_man,(350,525))
 timberly = pygame.image.load("assets/timberly.png")
 # timberly = pygame.transform.scale(timberly,(350,525))
 
 
 main_menu_bg = pygame.image.load("assets/bgg.png")
-main_menu_bg = pygame.transform.scale(main_menu_bg,(1000,667))
-screen.blit(main_menu_bg,(0,0))
+landing_bg = pygame.image.load("assets/landing_bg.png")
+screen.blit(landing_bg,(0,0))
 screen.blit(timberly,(292,30))
 pygame.display.update()
 
@@ -53,8 +52,6 @@ if not os.path.exists(os.path.join(data_dir,"user.env")):
             pygame.draw.rect(screen,(79,32,15),(30,200,930,207),15,30)
             if i%30==0:
                 count-=1
-            note = font.render("NOTE",True,(255,255,255))
-            text = font.render("Internet is required, the first time you run the application !!",True,(0,0,0))
             text2 = font.render(f"Restart for online !! Offline Mode Initiating ... {count}",True,(0,0,0))
             screen.blit(note,(430,230))
             screen.blit(text,(70,280))
@@ -80,24 +77,17 @@ else:
             USER_ID = random.randint(100000,9999999)
             show_name_input = True
 
+# Image loads
 bg = pygame.image.load("assets/bg.png")
-bg = pygame.transform.scale(bg, (1000,667))
 tree = pygame.image.load("assets/tree.png")
-tree = pygame.transform.scale(tree, (200,630))
 tree_log = pygame.image.load("assets/log.png")
-tree_log = pygame.transform.scale(tree_log, (200,80))
-man_1 = pygame.image.load("assets/man_1.png")
-man_1 = pygame.transform.scale(man_1, (200, 300))
-man_2 = pygame.image.load("assets/man_3.png")
-man_2 = pygame.transform.scale(man_2, (200, 300))
-man_3 = pygame.image.load("assets/man_4.png")
-man_3 = pygame.transform.scale(man_3, (200, 300))
-man_4 = pygame.image.load("assets/man_5.png")
-man_4 = pygame.transform.scale(man_4, (200, 300))
+man_up_left = pygame.image.load("assets/man_up_left.png")
+man_down_left = pygame.image.load("assets/man_down_left.png")
+man_up_right = pygame.image.load("assets/man_up_right.png")
+man_down_right = pygame.image.load("assets/man_down_right.png")
 branch = pygame.image.load("assets/branch.png")
-branch = pygame.transform.scale(branch, (300,60))
 branch_flipped = pygame.image.load("assets/branch_flipped.png")
-branch_flipped = pygame.transform.scale(branch_flipped, (300,60))
+
 dead_man = pygame.image.load("assets/dead.png")
 unchanged = pygame.image.load("assets/dead.png")
 unchanged = pygame.transform.scale(unchanged,(500,333))
@@ -107,37 +97,41 @@ dead_man = pygame.transform.rotate(dead_man,10)
 dead_man_flipped = pygame.image.load("assets/dead_flipped.png")
 dead_man_flipped = pygame.transform.scale(dead_man_flipped,(300,200))
 dead_man_flipped = pygame.transform.rotate(dead_man_flipped,-10)
-squished_img = pygame.image.load("assets/squished_3.png")
-squished_img = pygame.transform.scale(squished_img,(600,600))
+
+squished_img = pygame.image.load("assets/squished.png")
 time_over = pygame.image.load("assets/time_over.png")
-time_over = pygame.transform.scale(time_over,(400,400))
+
 wood = pygame.image.load("assets/wood.png")
 wood2 = pygame.transform.scale(wood,(60,60))
 wood = pygame.transform.scale(wood,(50,50))
+
 board = pygame.image.load("assets/menu.png")
-board = pygame.transform.scale(board,(500,750))
 smiling_man = pygame.image.load("assets/smiling_man.png")
-smiling_man = pygame.transform.scale(smiling_man,(240,360))
 github = pygame.image.load('assets/github.png')
-github = pygame.transform.scale(github, (50,50))
 slack = pygame.image.load('assets/slack.png')
-slack = pygame.transform.scale(slack, (108, 44.25))
 watching_man = pygame.image.load("assets/watching_man.png")
-watching_man = pygame.transform.scale(watching_man, (250,375))
-axe = pygame.image.load("assets/tick.png")
-axe = pygame.transform.scale(axe,(80,80))
+tick = pygame.image.load("assets/tick.png")
 cloud = pygame.image.load("assets/cloud.png")
-cloud = pygame.transform.scale(cloud, (350,253))
 leaderboard_img = pygame.image.load("assets/leaderboard.png")
-leaderboard_img = pygame.transform.scale(leaderboard_img,(1000,667))
 aleft = pygame.image.load("assets/leftji.png")
-aleft = pygame.transform.scale(aleft, (30,30))
 
-
+#fonts
 font2 = pygame.font.Font("assets/fonts/VarelaRound-Regular.ttf",24)
 font3 = pygame.font.Font("assets/fonts/BebasNeue-Regular.ttf",30)
 font4 = pygame.font.Font("assets/fonts/VarelaRound-Regular.ttf",40)
 font5 = pygame.font.Font("assets/fonts/VarelaRound-Regular.ttf",28)
+
+#renders
+score_ = font.render("Logs:", True, (0,0,0))
+menu_return1 = font5.render("Main Menu",True,(255,255,255))
+menu_return2 = font5.render("Replay",True,(255,255,255))
+play = font.render("PLAY", True, (255,255,255))
+leader = font.render("LEADERBOARD", True, (255,255,255))
+agi = font.render("Github",True,(255,255,255))
+offline = font.render("Offline Mode",True,(0,0,0))
+user_name1 = font4.render("Username",True,(255,255,255))
+note = font.render("NOTE",True,(255,255,255))
+text = font.render("Internet is required, the first time you run the application !!",True,(0,0,0))
 
 manager = pygame_textinput.TextInputManager(validator=lambda input: len(input) <= 15)
 textinput = pygame_textinput.TextInputVisualizer(manager=manager, font_object=font4)
@@ -244,16 +238,16 @@ def load_game():
     if game_running:
         if not still_man:
             if left:
-                screen.blit(man_2,(230,370))
+                screen.blit(man_down_left,(230,370))
             else:
-                screen.blit(man_4,(570,370))
+                screen.blit(man_down_right,(570,370))
         screen.blit(tree, (400,0))
         # screen.blit(bamboo, (300,230))
         if still_man:
             if left:
-                screen.blit(man_1,(230,360))
+                screen.blit(man_up_left,(230,360))
             else:
-                screen.blit(man_3,(570,360))
+                screen.blit(man_up_right,(570,360))
         screen.blit(tree_log,log_location)
     else:
         screen.blit(tree, (400,0))
@@ -266,7 +260,6 @@ def load_game():
     pygame.draw.rect(screen,(169,122,87),(20,20,220,50),border_radius=5)
     pygame.draw.rect(screen,(79,32,15),(20,20,220,50),5,5)
     screen.blit(wood,(30,20))
-    score_ = font.render("Logs:", True, (0,0,0))
     score_text = font.render(f"{score}", True, (0,0,0))
     screen.blit(score_,(92,28))
     screen.blit(score_text,(172,28))
@@ -325,14 +318,12 @@ def game_over_page():
     pygame.draw.rect(screen,(68, 121, 53),(270,500,200,70),border_radius=10)
     pygame.draw.rect(screen,(15, 51, 31),(270,500,200,70),4,10)
     pygame.draw.rect(screen,(139,69,19),(274,504,192,62),4,5)
-    menu_return = font5.render("Main Menu",True,(255,255,255))
-    screen.blit(menu_return,((296,520)))
+    screen.blit(menu_return1,((296,520)))
     #Button 2
     pygame.draw.rect(screen,(68, 121, 53),(530,500,200,70),border_radius=10)
     pygame.draw.rect(screen,(15, 51, 31),(530,500,200,70),4,10)
     pygame.draw.rect(screen,(139,69,19),(534,504,192,62),4,5)
-    menu_return = font5.render("Replay",True,(255,255,255))
-    screen.blit(menu_return,((586,520)))
+    screen.blit(menu_return2,((586,520)))
     pygame.display.update()
     
     
@@ -358,18 +349,15 @@ def main():
     # screen.blit(button,(480,100))
     pygame.draw.rect(screen,(169,122,87),(530,220,220,50),border_radius=5)
     pygame.draw.rect(screen,(79,32,15),(530,220,220,50),5,5)
-    play = font.render("PLAY", True, (255,255,255))
     screen.blit(play,(600,228))
     pygame.draw.rect(screen,(169,122,87),(510,310,260,50),border_radius=5)
     pygame.draw.rect(screen,(79,32,15),(510,310,260,50),5,5)
-    play = font.render("LEADERBOARD", True, (255,255,255))
-    screen.blit(play,(525,318))
+    screen.blit(leader,(525,318))
     #github button
     pygame.draw.rect(screen, (0,0,0),(550, 420, 170,50),border_radius=20)
     pygame.draw.rect(screen, (0,0,0),(550, 420, 170,50),4,border_radius=20)
     pygame.draw.rect(screen, (44, 42, 49), (562, 420, 45, 45),border_radius=10)
     screen.blit(github, (561,420))
-    agi = font.render("Github",True,(255,255,255))
     screen.blit(agi, (606,429))
     # pygame.draw.rect(screen, (255,255,255),(550, 420, 170,50),2,border_radius=20)
     #slack button
@@ -380,7 +368,6 @@ def main():
     if not online_game:
         pygame.draw.rect(screen,(169,122,87),(10,10,260,60),border_radius=30)
         pygame.draw.rect(screen,(79,32,15),(10,10,260,60),8,30)
-        offline = font.render("Offline Mode",True,(0,0,0))
         screen.blit(offline,(37,22))
         
     try:
@@ -494,8 +481,6 @@ def name_input():
     
     screen.blit(watching_man,(140,0))
     
-    
-    user_name1 = font4.render("Username",True,(255,255,255))
     screen.blit(user_name1,(200,300))
     pygame.draw.rect(screen,(169,122,87),(180,360,550,87),border_radius=30)
     pygame.draw.rect(screen,(79,32,15),(180,360,550,87),6,30)
@@ -519,7 +504,7 @@ while True:
                     score += 1
                     val = 0
                     pygame.time.set_timer(ANIMATE_MAN,50,1)
-                    pygame.time.set_timer(ANIMATE_LOG,1,30)
+                    pygame.time.set_timer(ANIMATE_LOG,1,10)
                     if time_left<=240-4 and time_left!=0:
                         time_left+=4
                     generate_branch_locs()
@@ -533,7 +518,7 @@ while True:
                     if time_left<=240-4 and time_left!=0:
                         time_left+=4
                     pygame.time.set_timer(ANIMATE_MAN,50,1)
-                    pygame.time.set_timer(ANIMATE_LOG,1,30)
+                    pygame.time.set_timer(ANIMATE_LOG,1,10)
                     generate_branch_locs()
                     load_game()
             if event.type == ANIMATE_MAN:
@@ -541,13 +526,14 @@ while True:
                 load_game()
             if event.type == ANIMATE_LOG:
                 val+=1
-                if val==30:
+                if val==10:
                     log_location = [400,520]
+                    val = 0
                 else:
                     if left:
-                        log_location = [log_location[0]+4,log_location[1]+5]
+                        log_location = [log_location[0]+10,log_location[1]+30]
                     else:
-                        log_location = [log_location[0]-4,log_location[1]+5]
+                        log_location = [log_location[0]-10,log_location[1]+30]
         if time_left!=0:
             time_left-=1
             if game_running:
@@ -658,7 +644,7 @@ while True:
             if textinput.value!="":
                 pygame.draw.rect(screen,(0, 128, 0),(745,360,100,87),border_radius=30)
                 pygame.draw.rect(screen,(79,32,15),(745,360,100,87),6,30)
-                screen.blit(axe,(755,368))
+                screen.blit(tick,(755,368))
             else:
                 pygame.draw.rect(screen,(169,122,87),(745,360,100,87),border_radius=30)
                 pygame.draw.rect(screen,(169,122,87),(745,360,100,87),6,30)
@@ -695,8 +681,6 @@ while True:
                             pygame.draw.rect(screen,(79,32,15),(30,200,930,207),15,30)
                             if i%30==0:
                                 count-=1
-                            note = font.render("NOTE",True,(255,255,255))
-                            text = font.render("Internet is required, the first time you run the application !!",True,(0,0,0))
                             text2 = font.render(f"Restart for online !! Offline Mode Initiating ... {count}",True,(0,0,0))
                             screen.blit(note,(430,230))
                             screen.blit(text,(70,280))
