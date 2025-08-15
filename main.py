@@ -179,7 +179,7 @@ sound_rect1.topleft = (728, 519)
 mute_rect1.topleft = (730,524)
 
 sound_rect2.topleft = (940,20)
-mute_rect2.topleft = (942,15)
+mute_rect2.topleft = (942,25)
 
 sound_rect3.topleft = (930,20)
 mute_rect3.topleft = (932,25)
