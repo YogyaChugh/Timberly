@@ -122,24 +122,40 @@ def update_score():
             found_user = user
             if user.score<score:
                 user.score = score
-                found_the_user = False
-                i = 0
-                temp = None
                 for k in users:
+                    found_the_user = False
+                    completed = False
+                    temp = None
+                    i = users.index(k)
+                    if user == k:
+                        break
                     if user.score>k.score:
+                        print(f"{user} is greater than {k}")
                         found_the_user = True
                         temp = k
-                        k = user
-                    while found_the_user:
-                        if i!=0:
-                            i+=1
-                            if k!=user:
-                                temp2 = k
-                                k = temp
-                                temp = temp2
-                            else:
-                                k = temp
-                                break
+                        users[i] = user
+                    while found_the_user and temp!=None:
+                        if i==len(users)-1:
+                            users.append(temp)
+                            completed = True
+                            break
+                        bro = users[i+1]
+                        i+=1
+                        print(f"Check for {bro} and {temp}")
+                        if bro!=user:
+                            print(f"Swapped {bro} with {temp}")
+                            temp2 = bro
+                            users[i] = temp
+                            temp = temp2
+                        else:
+                            print(f"Swapped {bro} with {temp}")
+                            users[i] = temp
+                            completed = True
+                            break
+                    if completed:
+                        print(f"List: {users}")
+                        break
+                                
             break
     if not found_user:
         return ""
