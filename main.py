@@ -178,8 +178,8 @@ mute_rect4 = mute_rect1.copy()
 sound_rect1.topleft = (728, 519)
 mute_rect1.topleft = (730,524)
 
-sound_rect2.topleft = (940,20)
-mute_rect2.topleft = (942,25)
+sound_rect2.topleft = (930,20)
+mute_rect2.topleft = (932,25)
 
 sound_rect3.topleft = (930,20)
 mute_rect3.topleft = (932,25)
@@ -289,44 +289,52 @@ def show_high_score():
     try:
         bb = requests.get("https://yogya.pythonanywhere.com/get_score",data={'id': USER_ID})
         # print(bb.content)
-        if main_menu:
+        bro = pygame.Surface((370,60))
+        bro.blit(main_menu_bg,(0,0),(20,10,370,60))
+        if main_menu and online_game:
             if eval(bb.content) != "":
                 if eval(bb.content)<999:
-                    pygame.draw.rect(screen,(169,122,87),(20,10,270,60),border_radius=30)
-                    pygame.draw.rect(screen,(79,32,15),(20,10,270,60),8,30)
+                    pygame.draw.rect(bro,(169,122,87),(0,0,270,60),border_radius=30)
+                    pygame.draw.rect(bro,(79,32,15),(0,0,270,60),8,30)
                 elif eval(bb.content)<9999:
-                    pygame.draw.rect(screen,(169,122,87),(20,10,320,60),border_radius=30)
-                    pygame.draw.rect(screen,(79,32,15),(20,10,320,60),8,30)
+                    pygame.draw.rect(bro,(169,122,87),(0,0,320,60),border_radius=30)
+                    pygame.draw.rect(bro,(79,32,15),(0,0,320,60),8,30)
                 else:
-                    pygame.draw.rect(screen,(169,122,87),(20,10,370,60),border_radius=30)
-                    pygame.draw.rect(screen,(79,32,15),(20,10,370,60),8,30)
+                    pygame.draw.rect(bro,(169,122,87),(0,0,370,60),border_radius=30)
+                    pygame.draw.rect(bro,(79,32,15),(0,0,370,60),8,30)
                 offline = font8.render(f"High Score: {eval(bb.content)}",True,(0,0,0))
                 if len(str(eval(bb.content)))==1:
-                    screen.blit(offline,(61,17))
+                    bro.blit(offline,(41,7))
                 elif len(str(eval(bb.content)))==2:
-                    screen.blit(offline,(51,17))
+                    bro.blit(offline,(31,7))
                 else:
-                    screen.blit(offline,(41,17))
-                pygame.display.update()
+                    bro.blit(offline,(21,7))
+                if main_menu:
+                    screen.blit(bro,(20,10))
+                    pygame.display.update()
     except:
-        if main_menu:
+        bro = pygame.Surface((370,60))
+        bro.blit(main_menu_bg,(0,0),(20,10,370,60))
+        if main_menu and online_game:
             if HIGH_SCORE<999:
-                pygame.draw.rect(screen,(169,122,87),(20,10,270,60),border_radius=30)
-                pygame.draw.rect(screen,(79,32,15),(20,10,270,60),8,30)
+                pygame.draw.rect(bro,(169,122,87),(0,0,270,60),border_radius=30)
+                pygame.draw.rect(bro,(79,32,15),(0,0,270,60),8,30)
             elif HIGH_SCORE<9999:
-                pygame.draw.rect(screen,(169,122,87),(20,10,320,60),border_radius=30)
-                pygame.draw.rect(screen,(79,32,15),(20,10,320,60),8,30)
+                pygame.draw.rect(bro,(169,122,87),(0,0,320,60),border_radius=30)
+                pygame.draw.rect(bro,(79,32,15),(0,0,320,60),8,30)
             else:
-                pygame.draw.rect(screen,(169,122,87),(20,10,370,60),border_radius=30)
-                pygame.draw.rect(screen,(79,32,15),(20,10,370,60),8,30)
+                pygame.draw.rect(bro,(169,122,87),(0,0,370,60),border_radius=30)
+                pygame.draw.rect(bro,(79,32,15),(0,0,370,60),8,30)
             offline = font.render(f"High Score: {HIGH_SCORE}",True,(0,0,0))
             if len(str(HIGH_SCORE))==1:
-                screen.blit(offline,(61,18))
+                bro.blit(offline,(41,8))
             elif len(str(HIGH_SCORE))==2:
-                screen.blit(offline,(51,18))
+                bro.blit(offline,(31,8))
             else:
-                screen.blit(offline,(41,18))
-            pygame.display.update()
+                bro.blit(offline,(21,8))
+            if main_menu:
+                screen.blit(bro,(20,10))
+                pygame.display.update()
 
 
 def get_leaderboard():
@@ -1152,7 +1160,7 @@ while True:
                         retry = font2.render("Retry",True,(0,0,0))
                         screen.blit(retry,(610,582))
                         pygame.display.update()
-    elif not main_menu and show_name_input and not leaderboard_screen and not info and not credits_page:
+    elif not main_menu and show_name_input and not leaderboard_screen and not info and not on_credits_page:
         pos = pygame.mouse.get_pos()
         if allow_textinput:
             textinput.update(events)
