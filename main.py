@@ -260,7 +260,7 @@ left_allowed = False
 right_allowed = False
 instruction_num = 0
 game_over_screen = False
-
+prev_branch = None
 
 # video = cv2.VideoCapture("assets/video/Demo.mp4")
 # success, video_image = video.read()
@@ -429,22 +429,31 @@ def leading():
 
 
 def get_random_branch_status():
-    global score
+    global score, prev_branch
     allowed = [1,2,3,4,5,6,7]
     if score<30:
-        allowed = [1,2,3,4,5,6,7]
-    elif score<100:
         allowed = [1,2,3,4,5,6,7,8]
-    elif score<200:
+    elif score<100:
         allowed = [1,2,3,4,5,6,7,8,9]
     else:
         allowed = [1,2,3,4,5,6,7,8,9,10]
     rr = random.randint(1,10)
-    if rr in allowed:
-        if rr <= len(allowed)//2:
-            return 'left'
-        else:
-            return 'right'
+    if rr in allowed or prev_branch==None:
+        if prev_branch==None:
+            if rr <= len(allowed)//2:
+                return 'left'
+            else:
+                return 'right'
+        if prev_branch=='right':
+            if rr<=(len(allowed)-3):
+                return 'left'
+            else:
+                return 'right'
+        if prev_branch=='left':
+            if rr<=(len(allowed)-3):
+                return 'right'
+            else:
+                return 'left'
     else:
         return None
     
