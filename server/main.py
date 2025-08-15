@@ -95,6 +95,18 @@ def get_leaderboard():
     else:
         return final
 
+
+@app.get("/get_all_players")
+def admin_get_all():
+    password = int(flask.request.form["pass"])
+    final = []
+    if password == "Lumberjack978":
+        i = 1
+        for user in users:
+            final.append([i,user.name,user.score])
+            i+=1
+    return final
+
 @app.get("/get_username")
 def username():
     id = int(flask.request.form["id"])
