@@ -1,0 +1,7 @@
+pygame
+pygame-textinput
+appdirs
+requests
+pillow
+asyncio
+opencv-python

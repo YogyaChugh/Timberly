@@ -31,20 +31,20 @@ application_allowed = True
 pygame.init()
 screen = pygame.display.set_mode((1000,667))
 pygame.display.set_caption(app_name)
-logo = pygame.image.load("assets/logo.png")
-wood = pygame.image.load("assets/wood.png")
+logo = pygame.image.load(os.path.join(base_path,"assets/logo.png"))
+wood = pygame.image.load(os.path.join(base_path,"assets/wood.png"))
 pygame.display.set_icon(logo)
 clock = pygame.time.Clock()
 
 
-font = pygame.font.Font("assets/fonts/VarelaRound-Regular.ttf",30)
-loading_man = pygame.image.load("assets/loading.png")
-timberly = pygame.image.load("assets/timberly.png")
+font = pygame.font.Font(os.path.join(base_path,"assets/fonts/VarelaRound-Regular.ttf"),30)
+loading_man = pygame.image.load(os.path.join(base_path,"assets/loading.png"))
+timberly = pygame.image.load(os.path.join(base_path,"assets/timberly.png"))
 # timberly = pygame.transform.scale(timberly,(350,525))
 
 
-main_menu_bg = pygame.image.load("assets/bgg.png")
-landing_bg = pygame.image.load("assets/landing_bg.png")
+main_menu_bg = pygame.image.load(os.path.join(base_path,"assets/bgg.png"))
+landing_bg = pygame.image.load(os.path.join(base_path,"assets/landing_bg.png"))
 screen.blit(landing_bg,(0,0))
 screen.blit(timberly,(292,30))
 pygame.display.update()
@@ -82,7 +82,7 @@ if not os.path.exists(os.path.join(data_dir,"user.env")):
             events = pygame.event.get()
             for event in events:
                 if event.type ==  pygame.QUIT:
-                    exit()
+                    sys.exit()
             clock.tick(30)
 else:
     with open(os.path.join(data_dir,"user.env"),'r') as file:
@@ -98,22 +98,22 @@ else:
             
             
 #audio
-pygame.mixer.music.load("assets/audio/magic_forest.wav")
-dead_sound = pygame.mixer.Sound("assets/audio/dead.wav")
-time_up_sound = pygame.mixer.Sound("assets/audio/time_up.wav")
-chop_sound = pygame.mixer.Sound("assets/audio/chop.wav")
+pygame.mixer.music.load(os.path.join(base_path,"assets/audio/magic_forest.wav"))
+dead_sound = pygame.mixer.Sound(os.path.join(base_path,"assets/audio/dead.wav"))
+time_up_sound = pygame.mixer.Sound(os.path.join(base_path,"assets/audio/time_up.wav"))
+chop_sound = pygame.mixer.Sound(os.path.join(base_path,"assets/audio/chop.wav"))
 
 
 # Image loads
-bg = pygame.image.load("assets/bg.png")
+bg = pygame.image.load(os.path.join(base_path,"assets/bg.png"))
 bg2 = pygame.transform.scale(bg, (500,333.5))
-tree = pygame.image.load("assets/tree.png")
+tree = pygame.image.load(os.path.join(base_path,"assets/tree.png"))
 tree2 = pygame.transform.scale(tree, (100,315))
-tree_log = pygame.image.load("assets/log.png")
-man_up_left = pygame.image.load("assets/man_up_left.png")
-man_down_left = pygame.image.load("assets/man_down_left.png")
-man_up_right = pygame.image.load("assets/man_up_right.png")
-man_down_right = pygame.image.load("assets/man_down_right.png")
+tree_log = pygame.image.load(os.path.join(base_path,"assets/log.png"))
+man_up_left = pygame.image.load(os.path.join(base_path,"assets/man_up_left.png"))
+man_down_left = pygame.image.load(os.path.join(base_path,"assets/man_down_left.png"))
+man_up_right = pygame.image.load(os.path.join(base_path,"assets/man_up_right.png"))
+man_down_right = pygame.image.load(os.path.join(base_path,"assets/man_down_right.png"))
 
 
 man_up_left2 = pygame.transform.scale(man_up_left,(100,150))
@@ -124,48 +124,48 @@ man_down_right2 = pygame.transform.scale(man_down_right,(100,150))
 
 
 
-branch = pygame.image.load("assets/branch.png")
+branch = pygame.image.load(os.path.join(base_path,"assets/branch.png"))
 branch2 = pygame.transform.scale(branch,(150,30))
-branch_flipped = pygame.image.load("assets/branch_flipped.png")
+branch_flipped = pygame.image.load(os.path.join(base_path,"assets/branch_flipped.png"))
 branch_flipped2 = pygame.transform.scale(branch_flipped,(150,30))
 
-dead_man = pygame.image.load("assets/dead.png")
-unchanged = pygame.image.load("assets/dead.png")
+dead_man = pygame.image.load(os.path.join(base_path,"assets/dead.png"))
+unchanged = pygame.image.load(os.path.join(base_path,"assets/dead.png"))
 unchanged = pygame.transform.scale(unchanged,(500,333))
 unchanged = pygame.transform.rotate(unchanged,10)
 dead_man = pygame.transform.scale(dead_man,(300,200))
 dead_man = pygame.transform.rotate(dead_man,10)
-dead_man_flipped = pygame.image.load("assets/dead_flipped.png")
+dead_man_flipped = pygame.image.load(os.path.join(base_path,"assets/dead_flipped.png"))
 dead_man_flipped = pygame.transform.scale(dead_man_flipped,(300,200))
 dead_man_flipped = pygame.transform.rotate(dead_man_flipped,-10)
 
-squished_img = pygame.image.load("assets/squished.png")
-time_over = pygame.image.load("assets/time_over.png")
+squished_img = pygame.image.load(os.path.join(base_path,"assets/squished.png"))
+time_over = pygame.image.load(os.path.join(base_path,"assets/time_over.png"))
 
 wood2 = pygame.transform.scale(wood,(60,60))
 wood = pygame.transform.scale(wood,(50,50))
 
-board = pygame.image.load("assets/menu.png")
-smiling_man = pygame.image.load("assets/smiling_man.png")
-github = pygame.image.load('assets/github.png')
-slack = pygame.image.load('assets/slack.png')
-watching_man = pygame.image.load("assets/watching_man.png")
-tick = pygame.image.load("assets/tick.png")
-cloud = pygame.image.load("assets/cloud.png")
+board = pygame.image.load(os.path.join(base_path,"assets/menu.png"))
+smiling_man = pygame.image.load(os.path.join(base_path,"assets/smiling_man.png"))
+github = pygame.image.load(os.path.join(base_path,'assets/github.png'))
+slack = pygame.image.load(os.path.join(base_path,'assets/slack.png'))
+watching_man = pygame.image.load(os.path.join(base_path,"assets/watching_man.png"))
+tick = pygame.image.load(os.path.join(base_path,"assets/tick.png"))
+cloud = pygame.image.load(os.path.join(base_path,"assets/cloud.png"))
 cloud = pygame.transform.rotate(cloud,347)
-leaderboard_img = pygame.image.load("assets/leaderboard.png")
-info_panel = pygame.image.load("assets/info_panel2.png")
-aleft = pygame.image.load("assets/leftji.png")
+leaderboard_img = pygame.image.load(os.path.join(base_path,"assets/leaderboard.png"))
+info_panel = pygame.image.load(os.path.join(base_path,"assets/info_panel2.png"))
+aleft = pygame.image.load(os.path.join(base_path,"assets/leftji.png"))
 aleft2 = pygame.transform.scale(aleft,(30,30))
 aright = pygame.transform.rotate(aleft,180)
 aright2 = pygame.transform.scale(aright,(30,30))
-wave = pygame.image.load("assets/wave.png")
-info_icon = pygame.image.load("assets/info.png")
+wave = pygame.image.load(os.path.join(base_path,"assets/wave.png"))
+info_icon = pygame.image.load(os.path.join(base_path,"assets/info.png"))
 info_icon_rect = info_icon.get_rect()
-info_icon_rect.topleft = (670, 519)
+info_icon_rect.topleft = (730, 129)
 
-volume = pygame.image.load("assets/volume.png")
-mute = pygame.image.load("assets/mute2.png")
+volume = pygame.image.load(os.path.join(base_path,"assets/volume.png"))
+mute = pygame.image.load(os.path.join(base_path,"assets/mute2.png"))
 sound_rect1 = volume.get_rect()
 sound_rect2 = sound_rect1.copy()
 sound_rect3 = sound_rect1.copy()
@@ -178,24 +178,24 @@ mute_rect4 = mute_rect1.copy()
 sound_rect1.topleft = (728, 519)
 mute_rect1.topleft = (730,524)
 
-sound_rect2.topleft = (940,10)
+sound_rect2.topleft = (940,20)
 mute_rect2.topleft = (942,15)
 
 sound_rect3.topleft = (930,20)
 mute_rect3.topleft = (932,25)
 
 #fonts
-font2 = pygame.font.Font("assets/fonts/VarelaRound-Regular.ttf",24)
-font3 = pygame.font.Font("assets/fonts/BebasNeue-Regular.ttf",30)
-font4 = pygame.font.Font("assets/fonts/VarelaRound-Regular.ttf",40)
-font5 = pygame.font.Font("assets/fonts/VarelaRound-Regular.ttf",28)
-font6 = pygame.font.Font("assets/fonts/VarelaRound-Regular.ttf",32)
-font7 = pygame.font.Font("assets/fonts/BebasNeue-Regular.ttf",70)
-font8 = pygame.font.Font("assets/fonts/BebasNeue-Regular.ttf",45)
-font9 = pygame.font.Font("assets/fonts/VarelaRound-Regular.ttf",50)
-font10 = pygame.font.Font("assets/fonts/VarelaRound-Regular.ttf",18)
+font2 = pygame.font.Font(os.path.join(base_path,"assets/fonts/VarelaRound-Regular.ttf"),24)
+font3 = pygame.font.Font(os.path.join(base_path,"assets/fonts/BebasNeue-Regular.ttf"),30)
+font4 = pygame.font.Font(os.path.join(base_path,"assets/fonts/VarelaRound-Regular.ttf"),40)
+font5 = pygame.font.Font(os.path.join(base_path,"assets/fonts/VarelaRound-Regular.ttf"),28)
+font6 = pygame.font.Font(os.path.join(base_path,"assets/fonts/VarelaRound-Regular.ttf"),32)
+font7 = pygame.font.Font(os.path.join(base_path,"assets/fonts/BebasNeue-Regular.ttf"),70)
+font8 = pygame.font.Font(os.path.join(base_path,"assets/fonts/BebasNeue-Regular.ttf"),45)
+font9 = pygame.font.Font(os.path.join(base_path,"assets/fonts/VarelaRound-Regular.ttf"),50)
+font10 = pygame.font.Font(os.path.join(base_path,"assets/fonts/VarelaRound-Regular.ttf"),18)
 
-gmail = pygame.image.load('assets/gmail.png')
+gmail = pygame.image.load(os.path.join(base_path,'assets/gmail.png'))
 email = font10.render("yogya.developer@gmail.com",True, (255,255,255))
 email_rect = email.get_rect()
 email_rect.topleft = (500,213)
@@ -268,7 +268,7 @@ game_over_screen = False
 
 
 
-gif = Image.open("assets/man.gif")
+gif = Image.open(os.path.join(base_path,"assets/man.gif"))
 frames = []
 try:
     while True:
@@ -522,8 +522,12 @@ def load_game():
     screen.blit(score_text,(172,28))
     
     if SOUND:
+        pygame.draw.rect(screen,(169,122,87),(sound_rect3[0]-5,sound_rect3[1],sound_rect3[2]+10,sound_rect3[3]),border_radius=5)
+        pygame.draw.rect(screen,(79,32,15),(sound_rect3[0]-5,sound_rect3[1],sound_rect3[2]+10,sound_rect3[3]),5,5)
         screen.blit(volume, sound_rect3)
     else:
+        pygame.draw.rect(screen,(169,122,87),(sound_rect3[0]-5,sound_rect3[1],sound_rect3[2]+10,sound_rect3[3]),border_radius=5)
+        pygame.draw.rect(screen,(79,32,15),(sound_rect3[0]-5,sound_rect3[1],sound_rect3[2]+10,sound_rect3[3]),5,5)
         screen.blit(mute, mute_rect3)
     
     pygame.draw.rect(screen,(55,55,55),(670,20,250,50),border_radius=5)
@@ -583,8 +587,12 @@ def credits_page():
     screen.blit(c, (170,559))
     
     if SOUND:
+        pygame.draw.rect(screen,(169,122,87),(sound_rect2[0]-5,sound_rect2[1],sound_rect2[2]+10,sound_rect2[3]),border_radius=5)
+        pygame.draw.rect(screen,(79,32,15),(sound_rect2[0]-5,sound_rect2[1],sound_rect2[2]+10,sound_rect2[3]),5,5)
         screen.blit(volume, sound_rect2)
     else:
+        pygame.draw.rect(screen,(169,122,87),(sound_rect2[0]-5,sound_rect2[1],sound_rect2[2]+10,sound_rect2[3]),border_radius=5)
+        pygame.draw.rect(screen,(79,32,15),(sound_rect2[0]-5,sound_rect2[1],sound_rect2[2]+10,sound_rect2[3]),5,5)
         screen.blit(mute, mute_rect2)
     
     pygame.display.update()
@@ -657,39 +665,37 @@ def game_over_page():
 
 def volume_redraw():
     if SOUND:
-        screen.blit(board,sound_rect1,(sound_rect1[0]-386,sound_rect1[1]+20,sound_rect1[2],sound_rect1[3]))
+        pygame.draw.rect(screen,(169,122,87),(sound_rect1[0]-5,sound_rect1[1],sound_rect1[2]+10,sound_rect1[3]),border_radius=5)
+        pygame.draw.rect(screen,(79,32,15),(sound_rect1[0]-5,sound_rect1[1],sound_rect1[2]+10,sound_rect1[3]),5,5)
         screen.blit(volume,sound_rect1)
     else:
-        screen.blit(board,sound_rect1,(sound_rect1[0]-386,sound_rect1[1]+20,sound_rect1[2],sound_rect1[3]))
+        pygame.draw.rect(screen,(169,122,87),(sound_rect1[0]-5,sound_rect1[1],sound_rect1[2]+10,sound_rect1[3]),border_radius=5)
+        pygame.draw.rect(screen,(79,32,15),(sound_rect1[0]-5,sound_rect1[1],sound_rect1[2]+10,sound_rect1[3]),5,5)
         screen.blit(mute,mute_rect1)
     pygame.display.update()
     
 def volume_redraw2():
     if SOUND:
-        screen.blit(main_menu_bg,sound_rect2,sound_rect2)
+        pygame.draw.rect(screen,(169,122,87),(sound_rect2[0]-5,sound_rect2[1],sound_rect2[2]+10,sound_rect2[3]),border_radius=5)
+        pygame.draw.rect(screen,(79,32,15),(sound_rect2[0]-5,sound_rect2[1],sound_rect2[2]+10,sound_rect2[3]),5,5)
         screen.blit(volume,sound_rect2)
     else:
-        screen.blit(main_menu_bg,sound_rect2,sound_rect2)
+        pygame.draw.rect(screen,(169,122,87),(sound_rect2[0]-5,sound_rect2[1],sound_rect2[2]+10,sound_rect2[3]),border_radius=5)
+        pygame.draw.rect(screen,(79,32,15),(sound_rect2[0]-5,sound_rect2[1],sound_rect2[2]+10,sound_rect2[3]),5,5)
         screen.blit(mute,mute_rect2)
     pygame.display.update()
     
 def volume_redraw3():
     if SOUND:
-        screen.blit(bg,sound_rect3,sound_rect3)
+        pygame.draw.rect(screen,(169,122,87),(sound_rect3[0]-5,sound_rect3[1],sound_rect3[2]+10,sound_rect3[3]),border_radius=5)
+        pygame.draw.rect(screen,(79,32,15),(sound_rect3[0]-5,sound_rect3[1],sound_rect3[2]+10,sound_rect3[3]),5,5)
         screen.blit(volume,sound_rect3)
     else:
-        screen.blit(bg,sound_rect3,sound_rect3)
+        pygame.draw.rect(screen,(169,122,87),(sound_rect3[0]-5,sound_rect3[1],sound_rect3[2]+10,sound_rect3[3]),border_radius=5)
+        pygame.draw.rect(screen,(79,32,15),(sound_rect3[0]-5,sound_rect3[1],sound_rect3[2]+10,sound_rect3[3]),5,5)
         screen.blit(mute,mute_rect3)
     pygame.display.update()
 
-def volume_redraw4():
-    if SOUND:
-        screen.blit(landing_bg,sound_rect2,sound_rect2)
-        screen.blit(volume,sound_rect2)
-    else:
-        screen.blit(landing_bg,sound_rect2,sound_rect2)
-        screen.blit(mute,mute_rect2)
-    pygame.display.update()
 
 def main():
     global hscore_thread, thread_for_hscore
@@ -709,6 +715,8 @@ def main():
             screen.blit(name,(110,220))
     
     # screen.blit(button,(480,100))
+    pygame.draw.rect(screen,(169,122,87),(info_icon_rect[0]-5,info_icon_rect[1]-5,info_icon_rect[2]+10,info_icon_rect[3]+10),border_radius=5)
+    pygame.draw.rect(screen,(79,32,15),(info_icon_rect[0]-5,info_icon_rect[1]-5,info_icon_rect[2]+10,info_icon_rect[3]+10),5,5)
     screen.blit(info_icon,info_icon_rect)
     pygame.draw.rect(screen,(169,122,87),(527,220,220,50),border_radius=5)
     pygame.draw.rect(screen,(79,32,15),(527,220,220,50),5,5)
@@ -722,8 +730,12 @@ def main():
     screen.blit(credits, (578,409))
     
     if SOUND:
+        pygame.draw.rect(screen,(169,122,87),(sound_rect1[0]-5,sound_rect1[1],sound_rect1[2]+10,sound_rect1[3]),border_radius=5)
+        pygame.draw.rect(screen,(79,32,15),(sound_rect1[0]-5,sound_rect1[1],sound_rect1[2]+10,sound_rect1[3]),5,5)
         screen.blit(volume,sound_rect1)
     else:
+        pygame.draw.rect(screen,(169,122,87),(sound_rect1[0]-5,sound_rect1[1],sound_rect1[2]+10,sound_rect1[3]),border_radius=5)
+        pygame.draw.rect(screen,(79,32,15),(sound_rect1[0]-5,sound_rect1[1],sound_rect1[2]+10,sound_rect1[3]),5,5)
         screen.blit(mute,mute_rect1)
     
     if not online_game:
@@ -820,8 +832,12 @@ def information():
     # screen.blit(textji6,(212,525))
     
     if SOUND:
+        pygame.draw.rect(screen,(169,122,87),(sound_rect2[0]-5,sound_rect2[1],sound_rect2[2]+10,sound_rect2[3]),border_radius=5)
+        pygame.draw.rect(screen,(79,32,15),(sound_rect2[0]-5,sound_rect2[1],sound_rect2[2]+10,sound_rect2[3]),5,5)
         screen.blit(volume,sound_rect2)
     else:
+        pygame.draw.rect(screen,(169,122,87),(sound_rect2[0]-5,sound_rect2[1],sound_rect2[2]+10,sound_rect2[3]),border_radius=5)
+        pygame.draw.rect(screen,(79,32,15),(sound_rect2[0]-5,sound_rect2[1],sound_rect2[2]+10,sound_rect2[3]),5,5)
         screen.blit(mute,mute_rect2)
     
     if on_page!=3:
@@ -900,8 +916,12 @@ def leaderboard():
     screen.blit(couldnt,(412,350))
     
     if SOUND:
+        pygame.draw.rect(screen,(169,122,87),(sound_rect2[0]-5,sound_rect2[1],sound_rect2[2]+10,sound_rect2[3]),border_radius=5)
+        pygame.draw.rect(screen,(79,32,15),(sound_rect2[0]-5,sound_rect2[1],sound_rect2[2]+10,sound_rect2[3]),5,5)
         screen.blit(volume,sound_rect2)
     else:
+        pygame.draw.rect(screen,(169,122,87),(sound_rect2[0]-5,sound_rect2[1],sound_rect2[2]+10,sound_rect2[3]),border_radius=5)
+        pygame.draw.rect(screen,(79,32,15),(sound_rect2[0]-5,sound_rect2[1],sound_rect2[2]+10,sound_rect2[3]),5,5)
         screen.blit(mute,mute_rect2)
     
     pygame.display.update()
@@ -1192,7 +1212,7 @@ while True:
                             events = pygame.event.get()
                             for event in events:
                                 if event.type ==  pygame.QUIT:
-                                    exit()
+                                    sys.exit()
                             clock.tick(30)
                     info = True
                     information()
@@ -1236,7 +1256,7 @@ while True:
                     elif not SOUND and SOUND_PLAYING:
                         SOUND_PLAYING = False
                         pygame.mixer.music.stop()
-                    volume_redraw4()
+                    volume_redraw2()
                 elif (event.pos[0]>20 and event.pos[0]<90 and event.pos[1]>20 and event.pos[1]<70):
                     main_menu = True
                     leaderboard_screen = False
@@ -1259,7 +1279,7 @@ while True:
                     elif not SOUND and SOUND_PLAYING:
                         SOUND_PLAYING = False
                         pygame.mixer.music.stop()
-                    volume_redraw4()
+                    volume_redraw2()
 
     if main_menu:
         if hscore_thread:
@@ -1499,6 +1519,6 @@ while True:
                     
     for event in events:
         if event.type == pygame.QUIT:
-            exit()
+            sys.exit()
             
     clock.tick(30)
