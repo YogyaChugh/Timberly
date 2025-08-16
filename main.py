@@ -248,7 +248,7 @@ credit_rect.topleft = (880,620)
 info = False
 timer_started = False
 SOUND = True
-SOUND_PLAYING = True
+SOUND_PLAYING = False
 on_credits_page = False
 frame_num = 0
 hscore_thread = False
@@ -991,6 +991,7 @@ if show_name_input:
     name_input()
 else:
     main_menu = True
+    SOUND_PLAYING = True
     pygame.mixer.music.play(-1)
     generate_branch_locs()
     main()
@@ -1257,6 +1258,12 @@ while True:
                                     sys.exit()
                             clock.tick(30)
                     info = True
+                    if SOUND and not SOUND_PLAYING:
+                        SOUND_PLAYING = True
+                        pygame.mixer.music.play(-1)
+                    elif not SOUND and SOUND_PLAYING:
+                        SOUND_PLAYING = False
+                        pygame.mixer.music.stop()
                     information()
                 else:
                     allow_textinput = False
