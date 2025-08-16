@@ -1,0 +1,412 @@
+
+<!-- BUILD MAJORLY USING AI #ChatGpt (Just this credits site)-->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Timberly Credits</title>
+<style>
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        background: url('https://www.transparenttextures.com/patterns/wood-pattern.png');
+        background-color: #d8b48a;
+        margin: 0;
+        padding: 0;
+    }
+
+    h1 {
+        text-align: center;
+        color: #4a2f14;
+        margin: 20px 0 10px;
+        text-shadow: 1px 1px #f5e2c4;
+    }
+
+    /* Credits layout */
+    .credits-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 10px;
+        gap: 15px;
+    }
+
+    .credit-box {
+        display: flex;
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+        width: 320px;
+        border: 2px solid #8b5a2b;
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .credit-box:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0,0,0,0.25);
+    }
+
+    .credit-box img {
+        width: 80px;
+        height: 80px;
+        object-fit: contain;
+        background: #f4e6d2;
+        padding: 6px;
+        border-right: 2px solid #8b5a2b;
+    }
+
+    .credit-info {
+        padding: 8px 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .credit-info h2 {
+        margin: 0 0 4px;
+        font-size: 0.95em;
+        color: #4a2f14;
+    }
+
+    .credit-info a {
+        color: #8b5a2b;
+        text-decoration: none;
+        font-size: 0.9em;
+    }
+    .credit-info a:hover {
+        text-decoration: underline;
+    }
+
+    /* Audio Section - compact list style */
+    .audio-section {
+        padding: 10px;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .audio-section h2 {
+        font-size: 1.2rem;
+        color: #4a2f14;
+        margin-bottom: 8px;
+        text-align: center;
+        text-shadow: 1px 1px #f5e2c4;
+    }
+
+    .audio-list {
+        display: grid;
+        gap: 8px;
+    }
+
+    .wood-audio {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background-color: rgba(255, 255, 255, 0.85);
+        border: 2px solid #8b5a2b;
+        border-radius: 8px;
+        padding: 6px 10px;
+    }
+
+    .wood-audio audio {
+        flex: 1;
+        height: 28px;
+    }
+
+    .audio-caption {
+        font-size: 0.8rem;
+        color: #4a2f14;
+        flex-shrink: 0;
+    }
+    .audio-caption a {
+        color: #8b5a2b;
+        text-decoration: none;
+    }
+    .audio-caption a:hover {
+        text-decoration: underline;
+    }
+
+        /* === Container (the "box") === */
+    .image-box {
+      --bg: rgba(255, 255, 255, 0.9);
+      --border: #8b5a2b;
+      --radius: 16px;
+      --gap: 14px;
+      --shadow: 0 8px 20px rgba(0,0,0,0.18);
+
+      width: min(1200px, 95vw);
+      max-height: 70vh;          /* taller so it can fit bigger thumbs */
+      margin: 20px auto;
+      padding: 16px;
+      background: var(--bg);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: auto;
+    }
+
+    /* === Responsive image grid with bigger cells === */
+    .image-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); /* bigger min size */
+      gap: var(--gap);
+    }
+
+    /* === Image cell === */
+    .image-grid .img {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #f3e6d6;
+      aspect-ratio: 1 / 1;       /* perfect square thumbs */
+      border: 1px solid #e0c9ae;
+      transition: transform .12s ease, box-shadow .12s ease;
+    }
+
+    .image-grid .img:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+
+    /* === The image itself === */
+    .image-grid .img > img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: saturate(1.02);
+      transition: transform .25s ease, filter .25s ease;
+    }
+
+    .image-grid .img:hover > img {
+      transform: scale(1.05);
+      filter: saturate(1.08);
+    }
+
+    /* === Optional caption === */
+    .image-grid .img figcaption {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      padding: 8px 10px;
+      font-size: 14px;
+      line-height: 1.3;
+      color: #2b1a0e;
+      background: linear-gradient(transparent, rgba(255,255,255,0.95));
+      opacity: 0;
+      transition: opacity .2s ease;
+    }
+
+    .image-grid .img:hover figcaption {
+      opacity: 1;
+    }
+
+    /* Scrollbar styling */
+    .image-box::-webkit-scrollbar { width: 10px; }
+    .image-box::-webkit-scrollbar-thumb {
+      background: #c9a27d; border-radius: 10px; border: 2px solid #f1e3d2;
+    }
+    .image-box::-webkit-scrollbar-track { background: #f6eadc; }
+
+
+</style>
+</head>
+<body>
+
+<h1>Credits</h1>
+<section class="audio-section"><h2>Images</h2></section>
+<div class="credits-container">
+
+    
+    <div class="credit-box">
+        <img src="assets/man.gif" alt="Asset Preview">
+        <div class="credit-info">
+            <h2>Idle 2D character by <a href="https://lottiefiles.com/fycmqsoigy">sidharth khurana</a></h2>
+            <a href="https://lottiefiles.com/free-animation/idle-2d-character-NScJoFnbK6" target="_blank">View Original</a>
+        </div>
+    </div>
+
+    <div class="credit-box">
+        <img src="assets/axe.png" alt="Asset Preview">
+        <div class="credit-info">
+            <h2><a href="https://www.flaticon.com/free-icons/axe" title="axe icons">Axe icons created by Freepik - Flaticon</a></h2>
+            <a href="https://www.flaticon.com/free-icons/axe" target="_blank">View Original</a>
+        </div>
+    </div>
+    
+    <div class="credit-box">
+        <img src="assets/26870.jpg" alt="Asset Preview">
+        <div class="credit-info">
+            <h2>Children and blank speech bubbles by <a href="https://www.freepik.com/author/brgfx">Brgfx</a></h2>
+            <a href="https://www.freepik.com/free-vector/children-blank-speech-bubbles_4485489.htm#fromView=keyword&page=1&position=2&uuid=447c3d6e-712e-45b5-ac7c-e5bde0f11aee&query=Dialog+Game" target="_blank">View Original</a>
+        </div>
+    </div>
+
+    <div class="credit-box">
+        <img src="assets/mute.png" alt="Asset Preview">
+        <div class="credit-info">
+            <h2><a href="https://www.flaticon.com/free-icons/mute" title="mute icons">Mute icons created by adrianadam - Flaticon</a></h2>
+            <a href="https://www.flaticon.com/free-icons/mute" target="_blank">View Original</a>
+        </div>
+    </div>
+
+    <div class="credit-box">
+        <img src="assets/github.png" alt="Asset Preview">
+        <div class="credit-info">
+            <h2><a href="https://www.flaticon.com/free-icons/github" title="github icons">Github icons created by riajulislam - Flaticon</a></h2>
+            <a href="https://www.flaticon.com/free-icons/github" target="_blank">View Original</a>
+        </div>
+    </div>
+
+    <div class="credit-box">
+        <img src="assets/gmail.png" alt="Asset Preview">
+        <div class="credit-info">
+            <h2><a href="https://www.flaticon.com/free-icons/interaction" title="interaction icons">Interaction icons created by Enamo Studios - Flaticon</a></h2>
+            <a href="https://www.flaticon.com/free-icons/interaction" target="_blank">View Original</a>
+        </div>
+    </div>
+
+    <div class="credit-box">
+        <img src="assets/leftji.png" alt="Asset Preview">
+        <div class="credit-info">
+            <h2><a href="https://www.flaticon.com/free-icons/back">Back icons created by Roundicons - Flaticon</a></h2>
+            <a href="https://www.flaticon.com/free-icons/back" target="_blank">View Original</a>
+        </div>
+    </div>
+
+    <div class="credit-box">
+        <img src="assets/slack.png" alt="Asset Preview">
+        <div class="credit-info">
+            <h2>Official Slack Logo</h2>
+            <a href="https://brandfolder.com/slack/logos/#!asset/pl546j-7le8zk-5guop3" target="_blank">View Original</a>
+        </div>
+    </div>
+
+    <div class="credit-box">
+        <img src="assets/tick.png" alt="Asset Preview">
+        <div class="credit-info">
+            <h2><a href="https://www.flaticon.com/free-icons/tick" title="tick icons">Tick icons created by Maxim Basinski Premium - Flaticon</a></h2>
+            <a href="https://www.flaticon.com/free-icons/tick" target="_blank">View Original</a>
+        </div>
+    </div>
+
+    <div class="credit-box">
+        <img src="assets/volume.png" alt="Asset Preview">
+        <div class="credit-info">
+            <h2><a href="https://www.flaticon.com/free-icons/windows-media-audio" title="windows media audio icons">Windows media audio icons created by Ferdinand - Flaticon</a></h2>
+            <a href="https://www.flaticon.com/free-icons/windows-media-audio" target="_blank">View Original</a>
+        </div>
+    </div>
+
+    <div class="credit-box">
+        <img src="assets/wave.png" alt="Asset Preview">
+        <div class="credit-info">
+            <h2><a href="https://www.flaticon.com/free-icons/hello" title="hello icons">Hello icons created by Kalashnyk - Flaticon</a></h2>
+            <a href="https://www.flaticon.com/free-icons/hello" target="_blank">View Original</a>
+        </div>
+    </div>
+
+    <div class="credit-box">
+        <img src="assets/wood.png" alt="Asset Preview">
+        <div class="credit-info">
+            <h2><a href="https://www.flaticon.com/free-icons/wood" title="wood icons">Wood icons created by Freepik - Flaticon</a></h2>
+            <a href="https://www.flaticon.com/free-icons/wood" target="_blank">View Original</a>
+        </div>
+    </div>
+</div>
+
+<section class="audio-section">
+    <h2>Google Fonts</h2>
+</section>
+<div class="credits-container">
+    <div class="credit-box">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/e/ee/Google_Fonts_logo.svg" alt="Asset Preview">
+        <div class="credit-info">
+            <h2><a href="https://fonts.google.com/specimen/Bebas+Neue" target="_blank">Bebas Neue</a> by <a href="https://fonts.google.com/?query=Ryoichi+Tsunekawa">Ryoichi Tsunekawa</a>- Google Fonts</h2>
+        </div>
+    </div>
+
+    <div class="credit-box">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/e/ee/Google_Fonts_logo.svg" alt="Asset Preview">
+        <div class="credit-info">
+            <h2><a href="https://fonts.google.com/specimen/Varela+Round" target="_blank">Varela Round</a> by <a href="https://fonts.google.com/?query=Joe+Prince">Joe Prince</a>- Google Fonts</h2>
+        </div>
+    </div>
+</div>
+
+
+<section class="audio-section">
+    <h2>Music & SFX</h2>
+
+    <div class="wood-audio">
+      <audio controls>
+        <source src="assets/audio/magic_forest.wav" type="audio/wav">
+        Your browser does not support audio.
+      </audio>
+      <div class="audio-caption">
+        Music by <a href="https://pixabay.com/users/darren_hirst-47836735/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=318165">Darren Hirst</a> from <a href="https://pixabay.com//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=318165">Pixabay</a>
+      </div>
+    </div>
+
+    <div class="wood-audio">
+      <audio controls>
+        <source src="assets/audio/chop.wav" type="audio/wav">
+        Your browser does not support audio.
+      </audio>
+      <div class="audio-caption">
+        Sound Effect by <a href="https://pixabay.com/users/freesound_community-46691455/?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=88986">freesound_community</a> from <a href="https://pixabay.com/sound-effects//?utm_source=link-attribution&utm_medium=referral&utm_campaign=music&utm_content=88986">Pixabay</a>
+      </div>
+    </div>
+    
+    <div class="wood-audio">
+      <audio controls>
+        <source src="assets/audio/time_up.wav" type="audio/wav">
+        Your browser does not support audio.
+      </audio>
+      <div class="audio-caption">
+        Funny game over by <a href="https://mixkit.co/">mixkit</a>. <a href="https://mixkit.co/free-sound-effects/game-over/" target="_blank">Here</a>
+      </div>
+    </div>
+    <div class="wood-audio">
+      <audio controls>
+        <source src="assets/audio/dead.wav" type="audio/wav">
+        Your browser does not support audio.
+      </audio>
+      <div class="audio-caption">
+        Combat - bloody splat (3) by <a href="https://uppbeat.io/">uppbeat</a>. <a href="https://uppbeat.io/sfx/combat-bloody-splat/8801/24904" target="_blank">Here</a>
+      </div>
+    </div>
+</section>
+
+
+<section class="audio-section">
+    <h2>Images generated using <a href="https://chatgpt.com/">ChatGpt</a></h2>
+</section>
+
+<div class="image-box">
+  <div class="image-grid">
+    <figure class="img"><img src="assets/landing_bg.png" alt="Landing Background"></figure>
+    <figure class="img"><img src="assets/bg.png" alt="Background 1"></figure>
+    <figure class="img"><img src="assets/bgg.png" alt="Background 2"></figure>
+    <figure class="img"><img src="assets/branch.png" alt="Branch"></figure>
+    <figure class="img"><img src="assets/dead.png" alt="Dead man cartoon"></figure>
+    <figure class="img"><img src="assets/info_panel.png" alt="Info panel"></figure>
+    <figure class="img"><img src="assets/leaderboard.png" alt="Leaderboard background"></figure>
+    <figure class="img"><img src="assets/loading.png" alt="Thinking Man"></figure>
+    <figure class="img"><img src="assets/logo.png" alt="Logo"></figure>
+    <figure class="img"><img src="assets/man_down_left.png" alt="Man Down"></figure>
+    <figure class="img"><img src="assets/man_up_left.png" alt="Man Up"></figure>
+    <figure class="img"><img src="assets/menu.png" alt="Menu Background"></figure>
+    <figure class="img"><img src="assets/man_up_left.png" alt="Man Up"></figure>
+    <figure class="img"><img src="assets/smiling_man.png" alt="Smiling Man"></figure>
+    <figure class="img"><img src="assets/squished.png" alt="Squished Text"></figure>
+    <figure class="img"><img src="assets/smiling_man.png" alt="Smiling Man"></figure>
+    <figure class="img"><img src="assets/timberly.png" alt="Timberly Image"></figure>
+    <figure class="img"><img src="assets/time_over.png" alt="Time Over"></figure>
+    <figure class="img"><img src="assets/watching_man.png" alt="Man Watching"></figure>
+  </div>
+</div>
+
+
+
+</body>
+</html>

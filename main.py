@@ -37,7 +37,7 @@ pygame.display.set_icon(logo)
 clock = pygame.time.Clock()
 
 
-font = pygame.font.Font(os.path.join(base_path,"assets/fonts/VarelaRound-Regular.ttf"),30)
+font = pygame.font.Font(os.path.join(base_path,"fonts/VarelaRound-Regular.ttf"),30)
 loading_man = pygame.image.load(os.path.join(base_path,"assets/loading.png"))
 timberly = pygame.image.load(os.path.join(base_path,"assets/timberly.png"))
 # timberly = pygame.transform.scale(timberly,(350,525))
@@ -98,10 +98,10 @@ else:
             
             
 #audio
-pygame.mixer.music.load(os.path.join(base_path,"assets/audio/magic_forest.wav"))
-dead_sound = pygame.mixer.Sound(os.path.join(base_path,"assets/audio/dead.wav"))
-time_up_sound = pygame.mixer.Sound(os.path.join(base_path,"assets/audio/time_up.wav"))
-chop_sound = pygame.mixer.Sound(os.path.join(base_path,"assets/audio/chop.wav"))
+pygame.mixer.music.load(os.path.join(base_path,"audio/magic_forest.wav"))
+dead_sound = pygame.mixer.Sound(os.path.join(base_path,"audio/dead.wav"))
+time_up_sound = pygame.mixer.Sound(os.path.join(base_path,"audio/time_up.wav"))
+chop_sound = pygame.mixer.Sound(os.path.join(base_path,"audio/chop.wav"))
 
 
 # Image loads
@@ -185,15 +185,15 @@ sound_rect3.topleft = (930,20)
 mute_rect3.topleft = (932,25)
 
 #fonts
-font2 = pygame.font.Font(os.path.join(base_path,"assets/fonts/VarelaRound-Regular.ttf"),24)
-font3 = pygame.font.Font(os.path.join(base_path,"assets/fonts/BebasNeue-Regular.ttf"),30)
-font4 = pygame.font.Font(os.path.join(base_path,"assets/fonts/VarelaRound-Regular.ttf"),40)
-font5 = pygame.font.Font(os.path.join(base_path,"assets/fonts/VarelaRound-Regular.ttf"),28)
-font6 = pygame.font.Font(os.path.join(base_path,"assets/fonts/VarelaRound-Regular.ttf"),32)
-font7 = pygame.font.Font(os.path.join(base_path,"assets/fonts/BebasNeue-Regular.ttf"),70)
-font8 = pygame.font.Font(os.path.join(base_path,"assets/fonts/BebasNeue-Regular.ttf"),45)
-font9 = pygame.font.Font(os.path.join(base_path,"assets/fonts/VarelaRound-Regular.ttf"),50)
-font10 = pygame.font.Font(os.path.join(base_path,"assets/fonts/VarelaRound-Regular.ttf"),18)
+font2 = pygame.font.Font(os.path.join(base_path,"fonts/VarelaRound-Regular.ttf"),24)
+font3 = pygame.font.Font(os.path.join(base_path,"fonts/BebasNeue-Regular.ttf"),30)
+font4 = pygame.font.Font(os.path.join(base_path,"fonts/VarelaRound-Regular.ttf"),40)
+font5 = pygame.font.Font(os.path.join(base_path,"fonts/VarelaRound-Regular.ttf"),28)
+font6 = pygame.font.Font(os.path.join(base_path,"fonts/VarelaRound-Regular.ttf"),32)
+font7 = pygame.font.Font(os.path.join(base_path,"fonts/BebasNeue-Regular.ttf"),70)
+font8 = pygame.font.Font(os.path.join(base_path,"fonts/BebasNeue-Regular.ttf"),45)
+font9 = pygame.font.Font(os.path.join(base_path,"fonts/VarelaRound-Regular.ttf"),50)
+font10 = pygame.font.Font(os.path.join(base_path,"fonts/VarelaRound-Regular.ttf"),18)
 
 gmail = pygame.image.load(os.path.join(base_path,'assets/gmail.png'))
 email = font10.render("yogya.developer@gmail.com",True, (255,255,255))
@@ -261,11 +261,6 @@ right_allowed = False
 instruction_num = 0
 game_over_screen = False
 prev_branch = None
-
-# video = cv2.VideoCapture("assets/video/Demo.mp4")
-# success, video_image = video.read()
-# fps = video.get(cv2.CAP_PROP_FPS)
-
 
 
 gif = Image.open(os.path.join(base_path,"assets/man.gif"))
@@ -439,22 +434,52 @@ def get_random_branch_status():
         allowed = [1,2,3,4,5,6,7,8,9,10]
     rr = random.randint(1,10)
     if rr in allowed or prev_branch==None:
-        if prev_branch==None:
-            if rr <= len(allowed)//2:
-                return 'left'
-            else:
-                return 'right'
-        if prev_branch=='right':
-            if rr<=(len(allowed)-3):
-                return 'left'
-            else:
-                return 'right'
-        if prev_branch=='left':
-            if rr<=(len(allowed)-3):
-                return 'right'
-            else:
-                return 'left'
+        if score<30:
+            if prev_branch==None:
+                if rr <= len(allowed)//2:
+                    prev_branch = 'left'
+                    return 'left'
+                else:
+                    prev_branch = 'right'
+                    return 'right'
+            if prev_branch=='right':
+                if rr<=(len(allowed)-3):
+                    prev_branch = 'left'
+                    return 'left'
+                else:
+                    prev_branch = 'right'
+                    return 'right'
+            if prev_branch=='left':
+                if rr<=(len(allowed)-3):
+                    prev_branch = 'right'
+                    return 'right'
+                else:
+                    prev_branch = 'left'
+                    return 'left'
+        else:
+            if prev_branch==None:
+                if rr <= len(allowed)//2:
+                    prev_branch = 'left'
+                    return 'left'
+                else:
+                    prev_branch = 'right'
+                    return 'right'
+            if prev_branch=='right':
+                if rr<=(len(allowed)-2):
+                    prev_branch = 'left'
+                    return 'left'
+                else:
+                    prev_branch = 'right'
+                    return 'right'
+            if prev_branch=='left':
+                if rr<=(len(allowed)-2):
+                    prev_branch = 'right'
+                    return 'right'
+                else:
+                    prev_branch = 'left'
+                    return 'left'
     else:
+        prev_branch = None
         return None
     
     
@@ -1258,7 +1283,7 @@ while True:
         for event in events:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if (event.pos[0]>450 and event.pos[0]<600 and event.pos[1]>260 and event.pos[1]<310):
-                    webbrowser.open("https://github.com/YogyaChugh/Timber.git")
+                    webbrowser.open("https://github.com/YogyaChugh/Timberly.git")
                 elif (event.pos[0]>610 and event.pos[0]<760 and event.pos[1]>260 and event.pos[1]<310):
                     webbrowser.open("https://hackclub.slack.com/team/U09218J0E94")
                 elif (event.pos[0]>120 and event.pos[0]<300 and event.pos[1]>550 and event.pos[1]<600):
