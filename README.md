@@ -39,6 +39,12 @@
   python3 main.py
 ```
 
+## **Wanna build it urself ??**
+Just do
+```bash
+  pyinstaller main.spec
+```
+
 ## **Credits**
 A lot of resources were used in this game and here's a link for the attributions !
 https://timber-credits.onrender.com
