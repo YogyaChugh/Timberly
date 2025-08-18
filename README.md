@@ -8,6 +8,7 @@
 ---
 
 MADE WITH ❤️ USING Pygame & a lot of other amazing libraries out there !!
+
 Deployed using Pygbag (for web) and pyinstaller (for Windows, Linux & Mac) !!
 ---
 Don't have storage ?? Play it online here at https://yogya-chugh.itch.io/timberly
