@@ -7,6 +7,12 @@
 
 ---
 
+MADE WITH ❤️ USING Pygame & a lot of other amazing libraries out there !!
+Deployed using Pygbag (for web) and pyinstaller (for Windows, Linux & Mac) !!
+
+Don't have storage ?? Play it online here at https://yogya-chugh.itch.io/timberly
+---
+
 ## **Features**
 - **Easy Gameplay** – Relax with soothing music & sound effects  
   <img src="https://github.com/user-attachments/assets/1618b638-171d-4433-a303-bc527e899823" alt="Gameplay" width="500"/>  
