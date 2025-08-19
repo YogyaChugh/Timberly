@@ -1,6 +1,7 @@
 # **Timberly**  <p>
   <img src="https://hackatime-badge.hackclub.com/U09218J0E94/Timber" alt="Typing animation">
 </p>
+
 *Classic wood-cutting game with an online leaderboard to compete with friends.*
 
 <p align="center">
