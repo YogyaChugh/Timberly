@@ -33,7 +33,8 @@ MADE WITH ❤️ USING Pygame & a lot of other amazing libraries out there !!
 
 ## **How To Play** (2 Options)
 1) Download the suitable version for your pc from [Releases](https://github.com/YogyaChugh/Timberly/releases/tag/v1.0).
-2) Clone this repository and run the following commmands:
+2) Play it online for both desktop & mobile at https://yogya-chugh.itch.io/timberly
+3) Clone this repository and run the following commmands:
 > You need to have python 3.13 installed !
 ### WINDOWS
 ```bash
