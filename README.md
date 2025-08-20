@@ -1,4 +1,7 @@
-# **Timberly**  
+# **Timberly**  <p>
+  <img src="https://hackatime-badge.hackclub.com/U09218J0E94/Timber" alt="Typing animation">
+</p>
+
 *Classic wood-cutting game with an online leaderboard to compete with friends.*
 
 <p align="center">
@@ -6,6 +9,14 @@
 </p>
 
 ---
+
+MADE WITH ❤️ USING Pygame & a lot of other amazing libraries out there !!
+---
+> Deployed using Pygbag (for web) and pyinstaller (for Windows, Linux & Mac) !!
+
+> Don't have storage ?? Play it online here at https://yogya-chugh.itch.io/timberly
+
+<br>
 
 ## **Features**
 - **Easy Gameplay** – Relax with soothing music & sound effects  
@@ -22,7 +33,8 @@
 
 ## **How To Play** (2 Options)
 1) Download the suitable version for your pc from [Releases](https://github.com/YogyaChugh/Timberly/releases/tag/v1.0).
-2) Clone this repository and run the following commmands:
+2) Play it online for both desktop & mobile at https://yogya-chugh.itch.io/timberly
+3) Clone this repository and run the following commmands:
 > You need to have python 3.13 installed !
 ### WINDOWS
 ```bash
@@ -37,6 +49,12 @@
   source/bin/activate
   pip3 install -r requirements.txt
   python3 main.py
+```
+
+## **Wanna build it urself ??**
+Just do
+```bash
+  pyinstaller main.spec
 ```
 
 ## **Credits**
