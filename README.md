@@ -46,7 +46,7 @@ MADE WITH ❤️ USING Pygame & a lot of other amazing libraries out there !!
 ### MAC/LINUX
 ```bash
   python3 -m venv .env
-  source/bin/activate
+  source .env/bin/activate
   pip3 install -r requirements.txt
   python3 main.py
 ```
