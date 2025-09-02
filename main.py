@@ -263,6 +263,7 @@ game_over_screen = False
 prev_branch = None
 
 
+
 gif = Image.open(os.path.join(base_path,"assets/man.gif"))
 frames = []
 try:
@@ -1147,10 +1148,10 @@ while True:
                     loading()
                     if SOUND and not SOUND_PLAYING:
                         SOUND_PLAYING = True
-                        pygame.mixer.music.play(-1)
+                        pygame.mixer.music.set_volume(100)
                     elif not SOUND and SOUND_PLAYING:
                         SOUND_PLAYING = False
-                        pygame.mixer.music.stop()
+                        pygame.mixer.music.set_volume(0)
                     game_over_screen = False
                     if hscore_thread:
                         try:
@@ -1260,10 +1261,13 @@ while True:
                     info = True
                     if SOUND and not SOUND_PLAYING:
                         SOUND_PLAYING = True
-                        pygame.mixer.music.play(-1)
+                        pygame.mixer.music.set_volume(100)
                     elif not SOUND and SOUND_PLAYING:
                         SOUND_PLAYING = False
-                        pygame.mixer.music.stop()
+                        pygame.mixer.music.set_volume(0)
+                    reset()
+                    pygame.mixer.music.play(-1)
+                    loading()
                     information()
                 else:
                     allow_textinput = False
@@ -1301,10 +1305,10 @@ while True:
                     SOUND = not SOUND
                     if SOUND and not SOUND_PLAYING:
                         SOUND_PLAYING = True
-                        pygame.mixer.music.play(-1)
+                        pygame.mixer.music.set_volume(100)
                     elif not SOUND and SOUND_PLAYING:
                         SOUND_PLAYING = False
-                        pygame.mixer.music.stop()
+                        pygame.mixer.music.set_volume(0)
                     volume_redraw2()
                 elif (event.pos[0]>20 and event.pos[0]<90 and event.pos[1]>20 and event.pos[1]<70):
                     main_menu = True
@@ -1324,10 +1328,10 @@ while True:
                     SOUND = not SOUND
                     if SOUND and not SOUND_PLAYING:
                         SOUND_PLAYING = True
-                        pygame.mixer.music.play(-1)
+                        pygame.mixer.music.set_volume(100)
                     elif not SOUND and SOUND_PLAYING:
                         SOUND_PLAYING = False
-                        pygame.mixer.music.stop()
+                        pygame.mixer.music.set_volume(0)
                     volume_redraw2()
 
     if main_menu:
@@ -1357,7 +1361,7 @@ while True:
                     loading()
                     reset()
                     if SOUND_PLAYING:
-                        pygame.mixer.music.stop()
+                        pygame.mixer.music.set_volume(0)
                         SOUND_PLAYING = False
                     load_game()
                 elif (event.pos[0]>507 and event.pos[0]<720 and event.pos[1]>400 and event.pos[1]<450):
@@ -1382,20 +1386,20 @@ while True:
                     volume_redraw()
                     if SOUND and not SOUND_PLAYING:
                         SOUND_PLAYING = True
-                        pygame.mixer.music.play(-1)
+                        pygame.mixer.music.set_volume(100)
                     elif not SOUND and SOUND_PLAYING:
                         SOUND_PLAYING = False
-                        pygame.mixer.music.stop()
+                        pygame.mixer.music.set_volume(0)
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_m:
                     SOUND = not SOUND
                     volume_redraw()
                     if SOUND and not SOUND_PLAYING:
                         SOUND_PLAYING = True
-                        pygame.mixer.music.play(-1)
+                        pygame.mixer.music.set_volume(100)
                     elif not SOUND and SOUND_PLAYING:
                         SOUND_PLAYING = False
-                        pygame.mixer.music.stop()
+                        pygame.mixer.music.set_volume(0)
     if leaderboard_screen:
         if leaderboard_thread:
             try:
@@ -1433,20 +1437,20 @@ while True:
                     volume_redraw2()
                     if SOUND and not SOUND_PLAYING:
                         SOUND_PLAYING = True
-                        pygame.mixer.music.play(-1)
+                        pygame.mixer.music.set_volume(100)
                     elif not SOUND and SOUND_PLAYING:
                         SOUND_PLAYING = False
-                        pygame.mixer.music.stop()
+                        pygame.mixer.music.set_volume(0)
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_m:
                     SOUND = not SOUND
                     volume_redraw2()
                     if SOUND and not SOUND_PLAYING:
                         SOUND_PLAYING = True
-                        pygame.mixer.music.play(-1)
+                        pygame.mixer.music.set_volume(100)
                     elif not SOUND and SOUND_PLAYING:
                         SOUND_PLAYING = False
-                        pygame.mixer.music.stop()
+                        pygame.mixer.music.set_volume(0)
                     
     if info:
         pos = pygame.mouse.get_pos()
@@ -1476,10 +1480,10 @@ while True:
                     volume_redraw2()
                     if SOUND and not SOUND_PLAYING:
                         SOUND_PLAYING = True
-                        pygame.mixer.music.play(-1)
+                        pygame.mixer.music.set_volume(100)
                     elif not SOUND and SOUND_PLAYING:
                         SOUND_PLAYING = False
-                        pygame.mixer.music.stop()
+                        pygame.mixer.music.set_volume(0)
                 elif (event.pos[0]>202 and event.pos[0]<272 and event.pos[1]>560 and event.pos[1]<610 and on_page!=1):
                     on_page-=1
                     if on_page==2:
@@ -1487,6 +1491,7 @@ while True:
                         instruction_num = 0
                         right_allowed = True
                         branch_locs2 = [['None',(305,410)], ['left',(305,310)],['right',(555,210)],['None',(305,110)]]
+                    loading()
                     information()
                 elif (event.pos[0]>752 and event.pos[0]<822 and event.pos[1]>560 and event.pos[1]<610 and on_page!=3):
                     on_page+=1
@@ -1495,6 +1500,7 @@ while True:
                         instruction_num = 0
                         right_allowed = True
                         branch_locs2 = [['None',(305,410)],['left',(305,310)],['right',(555,210)],['None',(305,110)]]
+                    loading()
                     information()
                 elif (event.pos[0]>722 and event.pos[0]<822 and event.pos[1]>560 and event.pos[1]<610 and on_page==3):
                     game_running=True
@@ -1503,7 +1509,7 @@ while True:
                     loading()
                     reset()
                     if SOUND_PLAYING:
-                        pygame.mixer.music.stop()
+                        pygame.mixer.music.set_volume(0)
                         SOUND_PLAYING = False
                     load_game()
             elif event.type == pygame.KEYDOWN:
@@ -1512,10 +1518,10 @@ while True:
                     volume_redraw2()
                     if SOUND and not SOUND_PLAYING:
                         SOUND_PLAYING = True
-                        pygame.mixer.music.play(-1)
+                        pygame.mixer.music.set_volume(100)
                     elif not SOUND and SOUND_PLAYING:
                         SOUND_PLAYING = False
-                        pygame.mixer.music.stop()
+                        pygame.mixer.music.set_volume(0)
                 elif (event.key == pygame.K_LEFT and still_man2 and on_page==1) or (event.key == pygame.K_LEFT and still_man2 and on_page==2 and left_allowed):
                     still_man2 = False
                     left2 = True
