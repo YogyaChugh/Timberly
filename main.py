@@ -159,17 +159,35 @@ info_icon_rect.topleft = (730, 129)
 volume = pygame.image.load(os.path.abspath("assets/volume.png"))
 mute = pygame.image.load(os.path.abspath("assets/mute2.png"))
 sound_rect1 = volume.get_rect()
+sound_rect1_alter = volume.get_rect()
 sound_rect2 = sound_rect1.copy()
+sound_rect2_alter = sound_rect1.copy()
 sound_rect3 = sound_rect1.copy()
 sound_rect4 = sound_rect1.copy()
 mute_rect1 = mute.get_rect()
+mute_rect1_alter = mute.get_rect()
 mute_rect2 = mute_rect1.copy()
+mute_rect2_alter = mute_rect1.copy()
 mute_rect3 = mute_rect1.copy()
 mute_rect4 = mute_rect1.copy()
+
+
 sound_rect1.topleft = (728, 519)
 mute_rect1.topleft = (730,524)
+
+sound_alter_rect = pygame.Rect(sound_rect1[0]-165,sound_rect1[1],sound_rect1[2]+170,sound_rect1[3])
+
+sound_rect1_alter.topleft = (568+35, 519)
+mute_rect1_alter.topleft = (570+35,524)
+
 sound_rect2.topleft = (930,20)
 mute_rect2.topleft = (932,25)
+
+sound_alter_rect2 = pygame.Rect(sound_rect2[0]-5, sound_rect2[1]-20, sound_rect2[2]+35, sound_rect2[3]+165)
+
+sound_rect2_alter.topleft = sound_rect2.topleft
+mute_rect2_alter.topleft = mute_rect2.topleft
+
 sound_rect3.topleft = (930,20)
 mute_rect3.topleft = (932,25)
 #fonts
@@ -247,7 +265,15 @@ prev_branch = None
 USER_ID = None
 USER_NAME = None
 done_recently = False
+altered_allowed = False
+alter_over = False
+SOUND_VOLUME = 100
+PREV_SOUND_VOLUME = 100
+DRAG_ALLOWED = False
 
+
+SOUND_RECT = pygame.Rect(sound_rect1_alter[0]+60,sound_rect1_alter[1]+20,100,sound_rect1_alter[3]-40)
+SOUND_RECT2 = pygame.Rect(sound_rect2_alter[0]+20,sound_rect2_alter[1]+53,sound_rect2_alter[2]-40,100)
 
 
 
@@ -654,16 +680,28 @@ def game_over_page():
     pygame.draw.rect(screen,(139,69,19),(534,504,192,62),4,5)
     screen.blit(menu_return2,((574,518)))
     pygame.display.update()
+
+
 def volume_redraw():
+    pygame.draw.rect(screen,(169,122,87),(sound_rect1[0]-5,sound_rect1[1],sound_rect1[2]+10,sound_rect1[3]),border_radius=5)
+    pygame.draw.rect(screen,(79,32,15),(sound_rect1[0]-5,sound_rect1[1],sound_rect1[2]+10,sound_rect1[3]),5,5)
     if SOUND:
-        pygame.draw.rect(screen,(169,122,87),(sound_rect1[0]-5,sound_rect1[1],sound_rect1[2]+10,sound_rect1[3]),border_radius=5)
-        pygame.draw.rect(screen,(79,32,15),(sound_rect1[0]-5,sound_rect1[1],sound_rect1[2]+10,sound_rect1[3]),5,5)
         screen.blit(volume,sound_rect1)
     else:
-        pygame.draw.rect(screen,(169,122,87),(sound_rect1[0]-5,sound_rect1[1],sound_rect1[2]+10,sound_rect1[3]),border_radius=5)
-        pygame.draw.rect(screen,(79,32,15),(sound_rect1[0]-5,sound_rect1[1],sound_rect1[2]+10,sound_rect1[3]),5,5)
         screen.blit(mute,mute_rect1)
     pygame.display.update()
+
+def volume_redraw_alter():
+    pygame.draw.rect(screen,(169,122,87),(sound_rect1_alter[0]-5,sound_rect1_alter[1],sound_rect1_alter[2]+135,sound_rect1_alter[3]),border_radius=5)
+    pygame.draw.rect(screen,(79,32,15),(sound_rect1_alter[0]-5,sound_rect1_alter[1],sound_rect1_alter[2]+135,sound_rect1_alter[3]),5,5)
+    pygame.draw.rect(screen,(79,32,15),(sound_rect1_alter[0]+65,sound_rect1_alter[1]+20,100,sound_rect1_alter[3]-40),2,border_radius=5)
+    pygame.draw.circle(screen,(79,32,15),(sound_rect1_alter[0]+65+SOUND_VOLUME, sound_rect1_alter[1]+25),10,10)
+    if SOUND:
+        screen.blit(volume,sound_rect1_alter)
+    else:
+        screen.blit(mute,mute_rect1_alter)
+    pygame.display.update()
+    
 def volume_redraw2():
     if SOUND:
         pygame.draw.rect(screen,(169,122,87),(sound_rect2[0]-5,sound_rect2[1],sound_rect2[2]+10,sound_rect2[3]),border_radius=5)
@@ -674,6 +712,20 @@ def volume_redraw2():
         pygame.draw.rect(screen,(79,32,15),(sound_rect2[0]-5,sound_rect2[1],sound_rect2[2]+10,sound_rect2[3]),5,5)
         screen.blit(mute,mute_rect2)
     pygame.display.update()
+    
+def volume_redraw_alter2():
+    pygame.draw.rect(screen,(169,122,87),(sound_rect2_alter[0]-5,sound_rect2_alter[1],sound_rect2_alter[2]+10,sound_rect2_alter[3]+125),border_radius=5)
+    pygame.draw.rect(screen,(79,32,15),(sound_rect2_alter[0]-5,sound_rect2_alter[1],sound_rect2_alter[2]+10,sound_rect2_alter[3]+125),5,5)
+    pygame.draw.rect(screen,(79,32,15),(sound_rect2_alter[0]+20,sound_rect2_alter[1]+58,sound_rect2_alter[2]-40,100),2,border_radius=5)
+    pygame.draw.circle(screen,(79,32,15),(sound_rect2_alter[0]+25, sound_rect2_alter[1]+158-SOUND_VOLUME),10,10)
+    if SOUND:
+        screen.blit(volume,sound_rect2_alter)
+    else:
+        screen.blit(mute,mute_rect2_alter)
+    pygame.display.update()
+
+
+
 def volume_redraw3():
     if SOUND:
         pygame.draw.rect(screen,(169,122,87),(sound_rect3[0]-5,sound_rect3[1],sound_rect3[2]+10,sound_rect3[3]),border_radius=5)
@@ -684,6 +736,7 @@ def volume_redraw3():
         pygame.draw.rect(screen,(79,32,15),(sound_rect3[0]-5,sound_rect3[1],sound_rect3[2]+10,sound_rect3[3]),5,5)
         screen.blit(mute,mute_rect3)
     pygame.display.update()
+    
 def main_page():
     global hscore_thread, thread_for_hscore
     screen.blit(main_menu_bg,(0,0))
@@ -915,7 +968,7 @@ def name_input2():
 
 
 async def main():
-    global application_allowed, ignore_mouse,just_did, screen, logo, wood, clock, font, loading_man, timberly, main_menu_bg, landing_bg, USER_ID, USER_NAME, HIGH_SCORE, online_game, show_name_input, dead_sound, time_up_sound, chop_sound, bg, bg2, tree, tree2, tree_log, man_up_left, man_down_left, man_up_right, man_down_right, man_up_left2, man_down_left2, man_up_right2, man_down_right2, branch, branch2, branch_flipped, branch_flipped2, dead_man, unchanged, dead_man_flipped, squished_img, time_over, wood2, board, smiling_man, github, slack, watching_man, tick, cloud, leaderboard_img, info_panel, aleft, aleft2, aright, aright2, wave, info_icon, info_icon_rect, volume, mute, sound_rect1, sound_rect2, sound_rect3, sound_rect4, mute_rect1, mute_rect2, mute_rect3, mute_rect4, font2, font3, font4, font5, font6, font7, font8, font9, font10, gmail, email, email_rect, score_, menu_return1, menu_return2, play, leader, agi, offline, user_name1, note, text, manager, ANIMATE_MAN, ANIMATE_LOG, still_man, still_man2, left, left2, do_action, branch_locs, branch_locs2, game_running, score, leaderboard_screen, BASE_BRANCH_LOC, TOTAL_BRANCHES, time_left, transparency, just_game_over, main_menu, squished, doit, score_updated, is_there_a_problem, log_location, val, credit, credit_rect, info, timer_started, SOUND, SOUND_PLAYING, on_credits_page, hscore_thread, thread_for_hscore, leaderboard_thread, thread_for_leaderboard, on_page, left_allowed, right_allowed, instruction_num, game_over_screen, prev_branch, again_call_it, previous_text, done_recently
+    global application_allowed,alter_over, altered_allowed, DRAG_ALLOWED, SOUND_VOLUME, PREV_SOUND_VOLUME, ignore_mouse,just_did, screen, logo, wood, clock, font, loading_man, timberly, main_menu_bg, landing_bg, USER_ID, USER_NAME, HIGH_SCORE, online_game, show_name_input, dead_sound, time_up_sound, chop_sound, bg, bg2, tree, tree2, tree_log, man_up_left, man_down_left, man_up_right, man_down_right, man_up_left2, man_down_left2, man_up_right2, man_down_right2, branch, branch2, branch_flipped, branch_flipped2, dead_man, unchanged, dead_man_flipped, squished_img, time_over, wood2, board, smiling_man, github, slack, watching_man, tick, cloud, leaderboard_img, info_panel, aleft, aleft2, aright, aright2, wave, info_icon, info_icon_rect, volume, mute, sound_rect1, sound_rect2, sound_rect3, sound_rect4, mute_rect1, mute_rect2, mute_rect3, mute_rect4, font2, font3, font4, font5, font6, font7, font8, font9, font10, gmail, email, email_rect, score_, menu_return1, menu_return2, play, leader, agi, offline, user_name1, note, text, manager, ANIMATE_MAN, ANIMATE_LOG, still_man, still_man2, left, left2, do_action, branch_locs, branch_locs2, game_running, score, leaderboard_screen, BASE_BRANCH_LOC, TOTAL_BRANCHES, time_left, transparency, just_game_over, main_menu, squished, doit, score_updated, is_there_a_problem, log_location, val, credit, credit_rect, info, timer_started, SOUND, SOUND_PLAYING, on_credits_page, hscore_thread, thread_for_hscore, leaderboard_thread, thread_for_leaderboard, on_page, left_allowed, right_allowed, instruction_num, game_over_screen, prev_branch, again_call_it, previous_text, done_recently, SOUND_RECT, sound_alter_rect, sound_alter_rect2, sound_rect1_alter, sound_rect2_alter, mute_rect1_alter, mute_rect2_alter
     show_name_input = True
     down_fingers = []
     try:
@@ -945,6 +998,7 @@ async def main():
         SOUND_PLAYING = True
         pygame.mixer.music.play(-1)
         generate_branch_locs()
+        loading()
         hscore_thread = False
         main_page()
     while True:
@@ -954,7 +1008,7 @@ async def main():
                 ignore_mouse = True
         if game_running:
             pos = pygame.mouse.get_pos()
-            if (sound_rect3.collidepoint(pos[0], pos[1])) or (mute_rect3.collidepoint(pos[0], pos[1])):
+            if (alter_over and sound_rect2.collidepoint(pos[0],pos[1])) or (alter_over and mute_rect2.collidepoint(pos[0],pos[1])) or (not alter_over and sound_rect2_alter.collidepoint(pos[0],pos[1])) or (not alter_over and SOUND_RECT2.collidepoint(pos[0],pos[1])) or (not alter_over and pos[0]>(sound_rect2_alter[0]+20) and pos[0]<(sound_rect2_alter[0]+40) and pos[1]>(sound_rect2_alter[1]+153-SOUND_VOLUME) and pos[1]<(sound_rect2_alter[1]+173-SOUND_VOLUME)):
                 pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
             else:
                 pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
@@ -1000,26 +1054,110 @@ async def main():
                         game_done = True
                         main_menu = True
                         loading()
+                        if SOUND:
+                            SOUND_PLAYING = True
+                            pygame.mixer.music.play(-1)
                         hscore_thread = False
                         main_page()
                     elif event.key == pygame.K_m:
                         SOUND = not SOUND
-                        volume_redraw3()
+                        if SOUND and not SOUND_PLAYING:
+                            SOUND_PLAYING = True
+                            if SOUND_VOLUME==0:
+                                SOUND_VOLUME = PREV_SOUND_VOLUME
+                            pygame.mixer.music.set_volume(SOUND_VOLUME/100)
+                        elif not SOUND and SOUND_PLAYING:
+                            SOUND_PLAYING = False
+                            PREV_SOUND_VOLUME = SOUND_VOLUME
+                            SOUND_VOLUME = 0
+                            pygame.mixer.music.set_volume(0)
+                        if alter_over:
+                            volume_redraw2()
+                        else:
+                            volume_redraw_alter2()
                 if event.type == pygame.MOUSEBUTTONDOWN and not ignore_mouse:
-                    if (sound_rect3.collidepoint(event.pos[0],event.pos[1])) or (mute_rect3.collidepoint(event.pos[0],event.pos[1])):
+                    if not alter_over and event.pos[0]>(sound_rect2_alter[0]+20) and event.pos[0]<(sound_rect2_alter[0]+40) and event.pos[1]>(sound_rect2_alter[1]+153-SOUND_VOLUME) and event.pos[1]<(sound_rect2_alter[1]+173-SOUND_VOLUME):
+                        DRAG_ALLOWED = True
+                    elif alter_over and (sound_rect2.collidepoint(event.pos[0],event.pos[1]) or mute_rect2.collidepoint(event.pos[0],event.pos[1])):
                         SOUND = not SOUND
-                        volume_redraw3()
+                        if SOUND and not SOUND_PLAYING:
+                            SOUND_PLAYING = True
+                            if SOUND_VOLUME==0:
+                                SOUND_VOLUME = PREV_SOUND_VOLUME
+                            pygame.mixer.music.set_volume(SOUND_VOLUME/100)
+                        elif not SOUND and SOUND_PLAYING:
+                            SOUND_PLAYING = False
+                            PREV_SOUND_VOLUME = SOUND_VOLUME
+                            SOUND_VOLUME = 0
+                            pygame.mixer.music.set_volume(0)
+                        volume_redraw2()
+                    elif (not alter_over and sound_rect2_alter.collidepoint(event.pos[0],event.pos[1])) or (not alter_over and mute_rect2_alter.collidepoint(event.pos[0],event.pos[1])):
+                        SOUND = not SOUND
+                        if SOUND and not SOUND_PLAYING:
+                            SOUND_PLAYING = True
+                            if SOUND_VOLUME==0:
+                                SOUND_VOLUME = PREV_SOUND_VOLUME
+                            pygame.mixer.music.set_volume(SOUND_VOLUME/100)
+                        elif not SOUND and SOUND_PLAYING:
+                            SOUND_PLAYING = False
+                            PREV_SOUND_VOLUME = SOUND_VOLUME
+                            SOUND_VOLUME = 0
+                            pygame.mixer.music.set_volume(0)
+                        volume_redraw_alter2()
+                    elif not alter_over and SOUND_RECT2.collidepoint(event.pos[0], event.pos[1]):
+                        SOUND_VOLUME = (SOUND_RECT2[1]+SOUND_RECT2[3]) - event.pos[1]
+                        if SOUND_VOLUME==0:
+                            SOUND = not SOUND
+                            SOUND_PLAYING = False
+                        else:
+                            SOUND = True
+                            SOUND_PLAYING = True
+                        pygame.mixer.music.set_volume(SOUND_VOLUME/100)
+                        volume_redraw_alter2()
+                elif event.type == pygame.MOUSEBUTTONUP:
+                    DRAG_ALLOWED = False
                 elif event.type == pygame.FINGERDOWN:
+                    if not alter_over and (event.x * screen.get_width())>(sound_rect2_alter[0]+20) and (event.x * screen.get_width())<(sound_rect2_alter[0]+40) and (event.y * screen.get_height())>(sound_rect2_alter[1]+153-SOUND_VOLUME) and (event.y * screen.get_height())<(sound_rect2_alter[1]+173-SOUND_VOLUME):
+                        DRAG_ALLOWED = True
                     if event.finger_id in down_fingers:
                         continue
                     down_fingers.append(event.finger_id)
-                    if (sound_rect3.collidepoint((event.x * screen.get_width()),(event.y * screen.get_height()))) or (mute_rect3.collidepoint((event.x * screen.get_width()),(event.y * screen.get_height()))):
-                        if done_recently:
-                            continue
-                        done_recently = True
-                        pygame.time.set_timer(ENABLE_SOUND_BUTTON,1000,0)
+                    if alter_over and (sound_rect2.collidepoint((event.x * screen.get_width()),(event.y * screen.get_height())) or mute_rect2.collidepoint((event.x * screen.get_width()),(event.y * screen.get_height()))):
                         SOUND = not SOUND
-                        volume_redraw3()
+                        if SOUND and not SOUND_PLAYING:
+                            SOUND_PLAYING = True
+                            if SOUND_VOLUME==0:
+                                SOUND_VOLUME = PREV_SOUND_VOLUME
+                            pygame.mixer.music.set_volume(SOUND_VOLUME/100)
+                        elif not SOUND and SOUND_PLAYING:
+                            SOUND_PLAYING = False
+                            PREV_SOUND_VOLUME = SOUND_VOLUME
+                            SOUND_VOLUME = 0
+                            pygame.mixer.music.set_volume(0)
+                        volume_redraw2()
+                    elif (not alter_over and sound_rect2_alter.collidepoint((event.x * screen.get_width()),(event.y * screen.get_height()))) or (not alter_over and mute_rect2_alter.collidepoint((event.x * screen.get_width()),(event.y * screen.get_height()))):
+                        SOUND = not SOUND
+                        if SOUND and not SOUND_PLAYING:
+                            SOUND_PLAYING = True
+                            if SOUND_VOLUME==0:
+                                SOUND_VOLUME = PREV_SOUND_VOLUME
+                            pygame.mixer.music.set_volume(SOUND_VOLUME/100)
+                        elif not SOUND and SOUND_PLAYING:
+                            SOUND_PLAYING = False
+                            PREV_SOUND_VOLUME = SOUND_VOLUME
+                            SOUND_VOLUME = 0
+                            pygame.mixer.music.set_volume(0)
+                        volume_redraw_alter2()
+                    elif not alter_over and SOUND_RECT2.collidepoint((event.x * screen.get_width()), (event.y * screen.get_height())):
+                        SOUND_VOLUME = (SOUND_RECT2[1]+SOUND_RECT2[3]) - (event.y * screen.get_height())
+                        if SOUND_VOLUME==0:
+                            SOUND = not SOUND
+                            SOUND_PLAYING = False
+                        else:
+                            SOUND = True
+                            SOUND_PLAYING = True
+                        pygame.mixer.music.set_volume(SOUND_VOLUME/100)
+                        volume_redraw_alter2()
                     else:
                         if ((event.x * screen.get_width())<(screen.get_width()/2)) and still_man:
                             if not timer_started:
@@ -1054,10 +1192,38 @@ async def main():
                                 chop_sound.play()
                             await load_game()
                 elif event.type == pygame.FINGERUP:
+                    DRAG_ALLOWED = False
                     try:
                         down_fingers.remove(event.finger_id)
                     except:
                         pass
+                elif not alter_over and event.type == pygame.MOUSEMOTION and DRAG_ALLOWED:
+                    mouse_x, mouse_y = event.pos
+                    SOUND_VOLUME = (SOUND_RECT2[1]+SOUND_RECT2[3]) - mouse_y
+                    if SOUND_VOLUME!=PREV_SOUND_VOLUME:
+                        if SOUND_VOLUME<0:
+                            SOUND_VOLUME=0
+                        if SOUND_VOLUME>100:
+                            SOUND_VOLUME=100
+                        if SOUND_VOLUME==0:
+                            SOUND = False
+                            SOUND_PLAYING = False
+                        else:
+                            SOUND = True
+                            SOUND_PLAYING = True
+                        PREV_SOUND_VOLUME = SOUND_VOLUME
+                        pygame.mixer.music.set_volume(SOUND_VOLUME/100)
+                        volume_redraw_alter2()
+                else:
+                    if (sound_rect2.collidepoint(pos[0],pos[1])) or (mute_rect2.collidepoint(pos[0],pos[1])) and altered_allowed:
+                        altered_allowed = False
+                        alter_over = False
+                        volume_redraw_alter2()
+                    elif not sound_alter_rect2.collidepoint(pos[0],pos[1]) and not alter_over:
+                        altered_allowed = True
+                        alter_over = True
+                        screen.blit(bg,sound_alter_rect2,sound_alter_rect2)
+                        volume_redraw2()
                 if event.type == ANIMATE_MAN:
                     still_man = True
                     await load_game()
@@ -1146,10 +1312,14 @@ async def main():
                         loading()
                         if SOUND and not SOUND_PLAYING:
                             SOUND_PLAYING = True
-                            pygame.mixer.music.play(-1)
+                            if SOUND_VOLUME==0:
+                                SOUND_VOLUME = PREV_SOUND_VOLUME
+                            pygame.mixer.music.set_volume(SOUND_VOLUME/100)
                         elif not SOUND and SOUND_PLAYING:
                             SOUND_PLAYING = False
-                            pygame.mixer.music.stop()
+                            PREV_SOUND_VOLUME = SOUND_VOLUME
+                            SOUND_VOLUME = 0
+                            pygame.mixer.music.set_volume(0)
                         game_over_screen = False
                         hscore_thread = False
                         main_page()
@@ -1202,10 +1372,14 @@ async def main():
                         loading()
                         if SOUND and not SOUND_PLAYING:
                             SOUND_PLAYING = True
-                            pygame.mixer.music.play(-1)
+                            if SOUND_VOLUME==0:
+                                SOUND_VOLUME = PREV_SOUND_VOLUME
+                            pygame.mixer.music.set_volume(SOUND_VOLUME/100)
                         elif not SOUND and SOUND_PLAYING:
                             SOUND_PLAYING = False
-                            pygame.mixer.music.stop()
+                            PREV_SOUND_VOLUME = SOUND_VOLUME
+                            SOUND_VOLUME = 0
+                            pygame.mixer.music.set_volume(0)
                         game_over_screen = False
                         hscore_thread = False
                         main_page()
@@ -1343,6 +1517,7 @@ async def main():
                         allow_textinput = False
                         again_call_it = True
                         show_name_input = False
+                        loading()
                         answer = str(textinput.value).lower().title()
                         try:
                             USER_ID = random.randint(100000,9999999)
@@ -1371,7 +1546,9 @@ async def main():
                             pygame.mixer.music.play(-1)
                         elif not SOUND and SOUND_PLAYING:
                             SOUND_PLAYING = False
-                            pygame.mixer.music.stop()
+                            PREV_SOUND_VOLUME = SOUND_VOLUME
+                            SOUND_VOLUME = 0
+                            pygame.mixer.music.set_volume(0)
                         information()
                     elif (not allow_textinput) or (allow_textinput and event.pos[1]<340):
                         allow_textinput = False
@@ -1389,6 +1566,7 @@ async def main():
                         allow_textinput = False
                         again_call_it = True
                         show_name_input = False
+                        loading()
                         answer = str(textinput.value).lower().title()
                         try:
                             USER_ID = random.randint(100000,9999999)
@@ -1417,7 +1595,9 @@ async def main():
                             pygame.mixer.music.play(-1)
                         elif not SOUND and SOUND_PLAYING:
                             SOUND_PLAYING = False
-                            pygame.mixer.music.stop()
+                            PREV_SOUND_VOLUME = SOUND_VOLUME
+                            SOUND_VOLUME = 0
+                            pygame.mixer.music.set_volume(0)
                         information()
                     elif (not allow_textinput) or (allow_textinput and (event.y * screen.get_height())<340):
                         allow_textinput = False
@@ -1428,6 +1608,44 @@ async def main():
                         down_fingers.remove(event.finger_id)
                     except:
                         pass
+                elif event.type == pygame.KEYDOWN:
+                    if textinput.value!="" and event.key==pygame.K_RETURN and allow_textinput:
+                        allow_textinput = False
+                        again_call_it = True
+                        show_name_input = False
+                        loading()
+                        answer = str(textinput.value).lower().title()
+                        try:
+                            USER_ID = random.randint(100000,9999999)
+                            data = {
+                                "id": USER_ID,
+                                "name": answer
+                            }
+                            a = await something_todo.post("https://yogya.pythonanywhere.com/register_user", data=data)
+                            USER_NAME = answer
+                            HIGH_SCORE = 0
+                        except:
+                            count = 5
+                            i = 0
+                            screen.blit(main_menu_bg,(0,0))
+                            pygame.draw.rect(screen,(169,122,87),(30,200,930,207),border_radius=30)
+                            pygame.draw.rect(screen,(79,32,15),(30,200,930,207),15,30)
+                            text2 = font.render(f"Restart for online !! Offline Mode Initiating ...",True,(0,0,0))
+                            screen.blit(note,(430,230))
+                            screen.blit(text,(70,280))
+                            screen.blit(text2,(70,330))
+                            pygame.display.update()
+                            await asyncio.sleep(3)
+                        info = True
+                        if SOUND and not SOUND_PLAYING:
+                            SOUND_PLAYING = True
+                            pygame.mixer.music.play(-1)
+                        elif not SOUND and SOUND_PLAYING:
+                            SOUND_PLAYING = False
+                            PREV_SOUND_VOLUME = SOUND_VOLUME
+                            SOUND_VOLUME = 0
+                            pygame.mixer.music.set_volume(0)
+                        information()
         if on_credits_page:
 
             # screen.blit(frames[frame_num], (50, 80))
@@ -1441,7 +1659,7 @@ async def main():
                 if (pos[0]>r[0] and pos[0]<r[0]+r[2] and pos[1]>r[1] and pos[1]<r[1]+r[3]):
                     in_oneji = True
                     pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
-            if email_rect.collidepoint(pos[0],pos[1]) or sound_rect2.collidepoint(pos[0],pos[1]) or mute_rect2.collidepoint(pos[0],pos[1]):
+            if email_rect.collidepoint(pos[0],pos[1]) or (alter_over and sound_rect2.collidepoint(pos[0],pos[1])) or (alter_over and mute_rect2.collidepoint(pos[0],pos[1])) or (not alter_over and sound_rect2_alter.collidepoint(pos[0],pos[1])) or (not alter_over and SOUND_RECT2.collidepoint(pos[0],pos[1])) or (not alter_over and pos[0]>(sound_rect2_alter[0]+20) and pos[0]<(sound_rect2_alter[0]+40) and pos[1]>(sound_rect2_alter[1]+153-SOUND_VOLUME) and pos[1]<(sound_rect2_alter[1]+173-SOUND_VOLUME)):
                 in_oneji = True
                 pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
             if not in_oneji:
@@ -1449,6 +1667,8 @@ async def main():
 
             for event in events:
                 if event.type == pygame.MOUSEBUTTONDOWN and not ignore_mouse:
+                    if not alter_over and event.pos[0]>(sound_rect2_alter[0]+20) and event.pos[0]<(sound_rect2_alter[0]+40) and event.pos[1]>(sound_rect2_alter[1]+153-SOUND_VOLUME) and event.pos[1]<(sound_rect2_alter[1]+173-SOUND_VOLUME):
+                        DRAG_ALLOWED = True
                     if (event.pos[0]>450 and event.pos[0]<600 and event.pos[1]>260 and event.pos[1]<310):
                         js.window.open("https://github.com/YogyaChugh/Timberly.git")
                     elif (event.pos[0]>610 and event.pos[0]<760 and event.pos[1]>260 and event.pos[1]<310):
@@ -1457,15 +1677,6 @@ async def main():
                         js.window.open("https://timber-credits.onrender.com")
                     elif (email_rect.collidepoint(event.pos[0],event.pos[1])):
                         js.window.open("https://mailto:yogya.developer@gmail.com")
-                    elif (sound_rect2.collidepoint(event.pos[0],event.pos[1])) or (mute_rect2.collidepoint(event.pos[0],event.pos[1])):
-                        SOUND = not SOUND
-                        if SOUND and not SOUND_PLAYING:
-                            SOUND_PLAYING = True
-                            pygame.mixer.music.play(-1)
-                        elif not SOUND and SOUND_PLAYING:
-                            SOUND_PLAYING = False
-                            pygame.mixer.music.stop()
-                        volume_redraw2()
                     elif (event.pos[0]>20 and event.pos[0]<90 and event.pos[1]>20 and event.pos[1]<70):
                         main_menu = True
                         leaderboard_screen = False
@@ -1474,7 +1685,45 @@ async def main():
                         loading()
                         hscore_thread = False
                         main_page()
+                    elif alter_over and (sound_rect2.collidepoint(event.pos[0],event.pos[1]) or mute_rect2.collidepoint(event.pos[0],event.pos[1])):
+                        SOUND = not SOUND
+                        if SOUND and not SOUND_PLAYING:
+                            SOUND_PLAYING = True
+                            if SOUND_VOLUME==0:
+                                SOUND_VOLUME = PREV_SOUND_VOLUME
+                            pygame.mixer.music.set_volume(SOUND_VOLUME/100)
+                        elif not SOUND and SOUND_PLAYING:
+                            SOUND_PLAYING = False
+                            PREV_SOUND_VOLUME = SOUND_VOLUME
+                            SOUND_VOLUME = 0
+                            pygame.mixer.music.set_volume(0)
+                        volume_redraw2()
+                    elif (not alter_over and sound_rect2_alter.collidepoint(event.pos[0],event.pos[1])) or (not alter_over and mute_rect2_alter.collidepoint(event.pos[0],event.pos[1])):
+                        SOUND = not SOUND
+                        if SOUND and not SOUND_PLAYING:
+                            SOUND_PLAYING = True
+                            if SOUND_VOLUME==0:
+                                SOUND_VOLUME = PREV_SOUND_VOLUME
+                            pygame.mixer.music.set_volume(SOUND_VOLUME/100)
+                        elif not SOUND and SOUND_PLAYING:
+                            SOUND_PLAYING = False
+                            PREV_SOUND_VOLUME = SOUND_VOLUME
+                            SOUND_VOLUME = 0
+                            pygame.mixer.music.set_volume(0)
+                        volume_redraw_alter2()
+                    elif not alter_over and SOUND_RECT2.collidepoint(event.pos[0], event.pos[1]):
+                        SOUND_VOLUME = (SOUND_RECT2[1]+SOUND_RECT2[3]) - event.pos[1]
+                        if SOUND_VOLUME==0:
+                            SOUND = not SOUND
+                            SOUND_PLAYING = False
+                        else:
+                            SOUND = True
+                            SOUND_PLAYING = True
+                        pygame.mixer.music.set_volume(SOUND_VOLUME/100)
+                        volume_redraw_alter2()
                 elif event.type == pygame.FINGERDOWN:
+                    if not alter_over and event.pos[0]>(sound_rect2_alter[0]+20) and event.pos[0]<(sound_rect2_alter[0]+40) and event.pos[1]>(sound_rect2_alter[1]+153-SOUND_VOLUME) and event.pos[1]<(sound_rect2_alter[1]+173-SOUND_VOLUME):
+                        DRAG_ALLOWED = True
                     if event.finger_id in down_fingers:
                         continue
                     down_fingers.append(event.finger_id)
@@ -1494,10 +1743,14 @@ async def main():
                         SOUND = not SOUND
                         if SOUND and not SOUND_PLAYING:
                             SOUND_PLAYING = True
-                            pygame.mixer.music.play(-1)
+                            if SOUND_VOLUME==0:
+                                SOUND_VOLUME = PREV_SOUND_VOLUME
+                            pygame.mixer.music.set_volume(SOUND_VOLUME/100)
                         elif not SOUND and SOUND_PLAYING:
                             SOUND_PLAYING = False
-                            pygame.mixer.music.stop()
+                            PREV_SOUND_VOLUME = SOUND_VOLUME
+                            SOUND_VOLUME = 0
+                            pygame.mixer.music.set_volume(0)
                         volume_redraw2()
                     elif ((event.x * screen.get_width())>20 and (event.x * screen.get_width())<90 and (event.y * screen.get_height())>20 and (event.y * screen.get_height())<70):
                         main_menu = True
@@ -1507,7 +1760,44 @@ async def main():
                         loading()
                         hscore_thread = False
                         main_page()
+                    elif alter_over and (sound_rect2.collidepoint(event.x * screen.get_width(),event.y * screen.get_height()) or mute_rect2.collidepoint(event.x * screen.get_width(),event.y * screen.get_height())):
+                        SOUND = not SOUND
+                        if SOUND and not SOUND_PLAYING:
+                            SOUND_PLAYING = True
+                            if SOUND_VOLUME==0:
+                                SOUND_VOLUME = PREV_SOUND_VOLUME
+                            pygame.mixer.music.set_volume(SOUND_VOLUME/100)
+                        elif not SOUND and SOUND_PLAYING:
+                            SOUND_PLAYING = False
+                            PREV_SOUND_VOLUME = SOUND_VOLUME
+                            SOUND_VOLUME = 0
+                            pygame.mixer.music.set_volume(0)
+                        volume_redraw2()
+                    elif (not alter_over and sound_rect2_alter.collidepoint(event.x * screen.get_width(),event.y * screen.get_height())) or (not alter_over and mute_rect2_alter.collidepoint(event.x * screen.get_width(),event.y * screen.get_height())):
+                        SOUND = not SOUND
+                        if SOUND and not SOUND_PLAYING:
+                            SOUND_PLAYING = True
+                            if SOUND_VOLUME==0:
+                                SOUND_VOLUME = PREV_SOUND_VOLUME
+                            pygame.mixer.music.set_volume(SOUND_VOLUME/100)
+                        elif not SOUND and SOUND_PLAYING:
+                            SOUND_PLAYING = False
+                            PREV_SOUND_VOLUME = SOUND_VOLUME
+                            SOUND_VOLUME = 0
+                            pygame.mixer.music.set_volume(0)
+                        volume_redraw_alter2()
+                    elif not alter_over and SOUND_RECT2.collidepoint(event.x * screen.get_width(), event.y * screen.get_height()):
+                        SOUND_VOLUME = (SOUND_RECT2[1]+SOUND_RECT2[3]) - (event.y * screen.get_height())
+                        if SOUND_VOLUME==0:
+                            SOUND = not SOUND
+                            SOUND_PLAYING = False
+                        else:
+                            SOUND = True
+                            SOUND_PLAYING = True
+                        pygame.mixer.music.set_volume(SOUND_VOLUME/100)
+                        volume_redraw_alter2()
                 elif event.type == pygame.FINGERUP:
+                    DRAG_ALLOWED = False
                     try:
                         down_fingers.remove(event.finger_id)
                     except:
@@ -1517,10 +1807,46 @@ async def main():
                         SOUND = not SOUND
                         if SOUND and not SOUND_PLAYING:
                             SOUND_PLAYING = True
-                            pygame.mixer.music.play(-1)
+                            if SOUND_VOLUME==0:
+                                SOUND_VOLUME = PREV_SOUND_VOLUME
+                            pygame.mixer.music.set_volume(SOUND_VOLUME/100)
                         elif not SOUND and SOUND_PLAYING:
                             SOUND_PLAYING = False
-                            pygame.mixer.music.stop()
+                            PREV_SOUND_VOLUME = SOUND_VOLUME
+                            SOUND_VOLUME = 0
+                            pygame.mixer.music.set_volume(0)
+                        if alter_over:
+                            volume_redraw2()
+                        else:
+                            volume_redraw_alter2()
+                elif event.type == pygame.MOUSEBUTTONUP:
+                    DRAG_ALLOWED = False
+                elif not alter_over and event.type == pygame.MOUSEMOTION and DRAG_ALLOWED:
+                    mouse_x, mouse_y = event.pos
+                    SOUND_VOLUME = (SOUND_RECT2[1]+SOUND_RECT2[3]) - mouse_y
+                    if SOUND_VOLUME!=PREV_SOUND_VOLUME:
+                        if SOUND_VOLUME<0:
+                            SOUND_VOLUME=0
+                        if SOUND_VOLUME>100:
+                            SOUND_VOLUME=100
+                        if SOUND_VOLUME==0:
+                            SOUND = False
+                            SOUND_PLAYING = False
+                        else:
+                            SOUND = True
+                            SOUND_PLAYING = True
+                        PREV_SOUND_VOLUME = SOUND_VOLUME
+                        pygame.mixer.music.set_volume(SOUND_VOLUME/100)
+                        volume_redraw_alter2()
+                else:
+                    if (sound_rect2.collidepoint(pos[0],pos[1])) or (mute_rect2.collidepoint(pos[0],pos[1])) and altered_allowed:
+                        altered_allowed = False
+                        alter_over = False
+                        volume_redraw_alter2()
+                    elif not sound_alter_rect2.collidepoint(pos[0],pos[1]) and not alter_over:
+                        altered_allowed = True
+                        alter_over = True
+                        screen.blit(landing_bg,sound_alter_rect2,sound_alter_rect2)
                         volume_redraw2()
 
         if main_menu:
@@ -1531,19 +1857,23 @@ async def main():
                 if (pos[0]>r[0] and pos[0]<r[0]+r[2] and pos[1]>r[1] and pos[1]<r[1]+r[3]):
                     in_one = True
                     pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
-            if info_icon_rect.collidepoint(pos[0],pos[1]) or sound_rect1.collidepoint(pos[0],pos[1]) or mute_rect1.collidepoint(pos[0],pos[1]):
+            if info_icon_rect.collidepoint(pos[0],pos[1]) or (alter_over and sound_rect1.collidepoint(pos[0],pos[1])) or (alter_over and mute_rect1.collidepoint(pos[0],pos[1])) or (not alter_over and sound_rect1_alter.collidepoint(pos[0],pos[1])) or (not alter_over and SOUND_RECT.collidepoint(pos[0],pos[1])) or (not alter_over and pos[0]>(sound_rect1_alter[0]+55+SOUND_VOLUME) and pos[0]<(sound_rect1_alter[0]+75+SOUND_VOLUME) and pos[1]>(sound_rect1_alter[1]+15) and pos[1]<(sound_rect1_alter[1]+35)):
                 in_one = True
                 pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
             if not in_one:
                 pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
             for event in events:
                 if event.type == pygame.MOUSEBUTTONDOWN and not ignore_mouse:
+                    if not alter_over and event.pos[0]>(sound_rect1_alter[0]+55+SOUND_VOLUME) and event.pos[0]<(sound_rect1_alter[0]+75+SOUND_VOLUME) and event.pos[1]>(sound_rect1_alter[1]+15) and event.pos[1]<(sound_rect1_alter[1]+35):
+                        DRAG_ALLOWED = True
                     if (event.pos[0]>527 and event.pos[0]<750 and event.pos[1]>220 and event.pos[1]<270):
                         game_running=True
                         main_menu=False
                         loading()
                         reset()
                         if SOUND_PLAYING:
+                            PREV_SOUND_VOLUME = SOUND_VOLUME
+                            SOUND_VOLUME = 0
                             pygame.mixer.music.stop()
                             SOUND_PLAYING = False
                         await load_game()
@@ -1565,15 +1895,39 @@ async def main():
                         reset()
                         loading()
                         information()
-                    elif (sound_rect1.collidepoint(event.pos[0],event.pos[1])) or (mute_rect1.collidepoint(event.pos[0],event.pos[1])):
+                    elif (alter_over and sound_rect1.collidepoint(event.pos[0],event.pos[1])) or (alter_over and mute_rect1.collidepoint(event.pos[0],event.pos[1])):
                         SOUND = not SOUND
-                        volume_redraw()
                         if SOUND and not SOUND_PLAYING:
                             SOUND_PLAYING = True
-                            pygame.mixer.music.play(-1)
+                            if SOUND_VOLUME==0:
+                                SOUND_VOLUME = PREV_SOUND_VOLUME
+                            pygame.mixer.music.set_volume(SOUND_VOLUME/100)
                         elif not SOUND and SOUND_PLAYING:
                             SOUND_PLAYING = False
-                            pygame.mixer.music.stop()
+                            PREV_SOUND_VOLUME = SOUND_VOLUME
+                            SOUND_VOLUME = 0
+                            pygame.mixer.music.set_volume(0)
+                        volume_redraw()
+                    elif (not alter_over and sound_rect1_alter.collidepoint(event.pos[0],event.pos[1])) or (not alter_over and mute_rect1_alter.collidepoint(event.pos[0],event.pos[1])):
+                        SOUND = not SOUND
+                        if SOUND and not SOUND_PLAYING:
+                            SOUND_PLAYING = True
+                            if SOUND_VOLUME==0:
+                                SOUND_VOLUME = PREV_SOUND_VOLUME
+                            pygame.mixer.music.set_volume(SOUND_VOLUME/100)
+                        elif not SOUND and SOUND_PLAYING:
+                            SOUND_PLAYING = False
+                            PREV_SOUND_VOLUME = SOUND_VOLUME
+                            SOUND_VOLUME = 0
+                            pygame.mixer.music.set_volume(0)
+                        volume_redraw_alter()
+                    elif not alter_over and SOUND_RECT.collidepoint(event.pos[0], event.pos[1]):
+                        SOUND_VOLUME = event.pos[0] - SOUND_RECT[0]
+                        if SOUND_VOLUME==0:
+                            SOUND = not SOUND
+                            SOUND_PLAYING = False
+                        pygame.mixer.music.set_volume(SOUND_VOLUME/100)
+                        volume_redraw_alter()
                 elif event.type == pygame.FINGERDOWN:
                     if event.finger_id in down_fingers:
                         continue
@@ -1584,6 +1938,8 @@ async def main():
                         loading()
                         reset()
                         if SOUND_PLAYING:
+                            PREV_SOUND_VOLUME = SOUND_VOLUME
+                            SOUND_VOLUME = 0
                             pygame.mixer.music.stop()
                             SOUND_PLAYING = False
                         await load_game()
@@ -1606,19 +1962,53 @@ async def main():
                         loading()
                         information()
                     elif (sound_rect1.collidepoint((event.x * screen.get_width()),(event.y * screen.get_height()))) or (mute_rect1.collidepoint((event.x * screen.get_width()),(event.y * screen.get_height()))):
-                        if done_recently:
-                            continue
-                        done_recently = True
-                        pygame.time.set_timer(ENABLE_SOUND_BUTTON,1000,0)
                         SOUND = not SOUND
                         volume_redraw()
                         if SOUND and not SOUND_PLAYING:
                             SOUND_PLAYING = True
-                            pygame.mixer.music.play(-1)
+                            if SOUND_VOLUME==0:
+                                SOUND_VOLUME = PREV_SOUND_VOLUME
+                            pygame.mixer.music.set_volume(SOUND_VOLUME/100)
                         elif not SOUND and SOUND_PLAYING:
                             SOUND_PLAYING = False
-                            pygame.mixer.music.stop()
+                            PREV_SOUND_VOLUME = SOUND_VOLUME
+                            SOUND_VOLUME = 0
+                            pygame.mixer.music.set_volume(0)
+                    elif (alter_over and sound_rect1.collidepoint((event.x * screen.get_width()),(event.y * screen.get_height()))) or (alter_over and mute_rect1.collidepoint((event.x * screen.get_width()),(event.y * screen.get_height()))):
+                        SOUND = not SOUND
+                        if SOUND and not SOUND_PLAYING:
+                            SOUND_PLAYING = True
+                            if SOUND_VOLUME==0:
+                                SOUND_VOLUME = PREV_SOUND_VOLUME
+                            pygame.mixer.music.set_volume(SOUND_VOLUME/100)
+                        elif not SOUND and SOUND_PLAYING:
+                            SOUND_PLAYING = False
+                            PREV_SOUND_VOLUME = SOUND_VOLUME
+                            SOUND_VOLUME = 0
+                            pygame.mixer.music.set_volume(0)
+                        volume_redraw()
+                    elif (not alter_over and sound_rect1_alter.collidepoint((event.x * screen.get_width()),(event.y * screen.get_height()))) or (not alter_over and mute_rect1_alter.collidepoint((event.x * screen.get_width()),(event.y * screen.get_height()))):
+                        SOUND = not SOUND
+                        if SOUND and not SOUND_PLAYING:
+                            SOUND_PLAYING = True
+                            if SOUND_VOLUME==0:
+                                SOUND_VOLUME = PREV_SOUND_VOLUME
+                            pygame.mixer.music.set_volume(SOUND_VOLUME/100)
+                        elif not SOUND and SOUND_PLAYING:
+                            SOUND_PLAYING = False
+                            PREV_SOUND_VOLUME = SOUND_VOLUME
+                            SOUND_VOLUME = 0
+                            pygame.mixer.music.set_volume(0)
+                        volume_redraw_alter()
+                    elif not alter_over and SOUND_RECT.collidepoint((event.x * screen.get_width()), (event.y * screen.get_height())):
+                        SOUND_VOLUME = (event.x * screen.get_width()) - SOUND_RECT[0]
+                        if SOUND_VOLUME==0:
+                            SOUND = not SOUND
+                            SOUND_PLAYING = False
+                        pygame.mixer.music.set_volume(SOUND_VOLUME/100)
+                        volume_redraw_alter()
                 elif event.type == pygame.FINGERUP:
+                    DRAG_ALLOWED = False
                     try:
                         down_fingers.remove(event.finger_id)
                     except:
@@ -1626,21 +2016,59 @@ async def main():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_m:
                         SOUND = not SOUND
-                        volume_redraw()
                         if SOUND and not SOUND_PLAYING:
                             SOUND_PLAYING = True
-                            pygame.mixer.music.play(-1)
+                            if SOUND_VOLUME==0:
+                                SOUND_VOLUME = PREV_SOUND_VOLUME
+                            pygame.mixer.music.set_volume(SOUND_VOLUME/100)
                         elif not SOUND and SOUND_PLAYING:
                             SOUND_PLAYING = False
-                            pygame.mixer.music.stop()
+                            PREV_SOUND_VOLUME = SOUND_VOLUME
+                            SOUND_VOLUME = 0
+                            pygame.mixer.music.set_volume(0)
+                        if alter_over:
+                            volume_redraw()
+                        else:
+                            volume_redraw_alter()
+                elif event.type == pygame.MOUSEBUTTONUP:
+                    DRAG_ALLOWED = False
+                elif not alter_over and event.type == pygame.MOUSEMOTION and DRAG_ALLOWED:
+                    mouse_x, mouse_y = event.pos
+                    SOUND_VOLUME = mouse_x - SOUND_RECT[0]
+                    if SOUND_VOLUME!=PREV_SOUND_VOLUME:
+                        if SOUND_VOLUME<0:
+                            SOUND_VOLUME=0
+                        if SOUND_VOLUME>100:
+                            SOUND_VOLUME=100
+                        if SOUND_VOLUME==0:
+                            SOUND = False
+                            SOUND_PLAYING = False
+                        else:
+                            SOUND = True
+                            SOUND_PLAYING = True
+                        PREV_SOUND_VOLUME = SOUND_VOLUME
+                        pygame.mixer.music.set_volume(SOUND_VOLUME/100)
+                        volume_redraw_alter()
+                else:
+                    if (sound_rect1.collidepoint(pos[0],pos[1])) or (mute_rect1.collidepoint(pos[0],pos[1])) and altered_allowed:
+                        altered_allowed = False
+                        alter_over = False
+                        volume_redraw_alter()
+                    elif not sound_alter_rect.collidepoint(pos[0],pos[1]) and not alter_over:
+                        altered_allowed = True
+                        alter_over = True
+                        screen.blit(board,sound_alter_rect,(sound_alter_rect[0]-386,sound_alter_rect[1]+20, sound_alter_rect[2],sound_alter_rect[3]))
+                        volume_redraw()
         if leaderboard_screen:
             pos = pygame.mouse.get_pos()
-            if (pos[0]>20 and pos[0]<90 and pos[1]>20 and pos[1]<70) or sound_rect2.collidepoint(pos[0],pos[1]) or mute_rect2.collidepoint(pos[0],pos[1]):
+            if (pos[0]>20 and pos[0]<90 and pos[1]>20 and pos[1]<70) or (alter_over and sound_rect2.collidepoint(pos[0],pos[1])) or (alter_over and mute_rect2.collidepoint(pos[0],pos[1])) or (not alter_over and sound_rect2_alter.collidepoint(pos[0],pos[1])) or (not alter_over and SOUND_RECT2.collidepoint(pos[0],pos[1])) or (not alter_over and pos[0]>(sound_rect2_alter[0]+20) and pos[0]<(sound_rect2_alter[0]+40) and pos[1]>(sound_rect2_alter[1]+153-SOUND_VOLUME) and pos[1]<(sound_rect2_alter[1]+173-SOUND_VOLUME)):
                 pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
             else:
                 pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
             for event in events:
                 if event.type == pygame.MOUSEBUTTONDOWN and not ignore_mouse:
+                    if not alter_over and event.pos[0]>(sound_rect2_alter[0]+20) and event.pos[0]<(sound_rect2_alter[0]+40) and event.pos[1]>(sound_rect2_alter[1]+153-SOUND_VOLUME) and event.pos[1]<(sound_rect2_alter[1]+173-SOUND_VOLUME):
+                        DRAG_ALLOWED = True
                     if event.pos[0]>20 and event.pos[0]<90 and event.pos[1]>20 and event.pos[1]<70:
                         main_menu = True
                         leaderboard_screen = False
@@ -1648,15 +2076,42 @@ async def main():
                         loading()
                         hscore_thread = False
                         main_page()
-                    elif sound_rect2.collidepoint(event.pos[0],event.pos[1]) or mute_rect2.collidepoint(event.pos[0],event.pos[1]):
+                    elif alter_over and (sound_rect2.collidepoint(event.pos[0],event.pos[1]) or mute_rect2.collidepoint(event.pos[0],event.pos[1])):
                         SOUND = not SOUND
-                        volume_redraw2()
                         if SOUND and not SOUND_PLAYING:
                             SOUND_PLAYING = True
-                            pygame.mixer.music.play(-1)
+                            if SOUND_VOLUME==0:
+                                SOUND_VOLUME = PREV_SOUND_VOLUME
+                            pygame.mixer.music.set_volume(SOUND_VOLUME/100)
                         elif not SOUND and SOUND_PLAYING:
                             SOUND_PLAYING = False
-                            pygame.mixer.music.stop()
+                            PREV_SOUND_VOLUME = SOUND_VOLUME
+                            SOUND_VOLUME = 0
+                            pygame.mixer.music.set_volume(0)
+                        volume_redraw2()
+                    elif (not alter_over and sound_rect2_alter.collidepoint(event.pos[0],event.pos[1])) or (not alter_over and mute_rect2_alter.collidepoint(event.pos[0],event.pos[1])):
+                        SOUND = not SOUND
+                        if SOUND and not SOUND_PLAYING:
+                            SOUND_PLAYING = True
+                            if SOUND_VOLUME==0:
+                                SOUND_VOLUME = PREV_SOUND_VOLUME
+                            pygame.mixer.music.set_volume(SOUND_VOLUME/100)
+                        elif not SOUND and SOUND_PLAYING:
+                            SOUND_PLAYING = False
+                            PREV_SOUND_VOLUME = SOUND_VOLUME
+                            SOUND_VOLUME = 0
+                            pygame.mixer.music.set_volume(0)
+                        volume_redraw_alter2()
+                    elif not alter_over and SOUND_RECT2.collidepoint(event.pos[0], event.pos[1]):
+                        SOUND_VOLUME = (SOUND_RECT2[1]+SOUND_RECT2[3]) - event.pos[1]
+                        if SOUND_VOLUME==0:
+                            SOUND = not SOUND
+                            SOUND_PLAYING = False
+                        else:
+                            SOUND = True
+                            SOUND_PLAYING = True
+                        pygame.mixer.music.set_volume(SOUND_VOLUME/100)
+                        volume_redraw_alter2()
                 elif event.type == pygame.FINGERDOWN:
                     if event.finger_id in down_fingers:
                         continue
@@ -1668,20 +2123,44 @@ async def main():
                         loading()
                         hscore_thread = False
                         main_page()
-                    elif sound_rect2.collidepoint((event.x * screen.get_width()),(event.y * screen.get_height())) or mute_rect2.collidepoint((event.x * screen.get_width()),(event.y * screen.get_height())):
-                        if done_recently:
-                            continue
-                        done_recently = True
-                        pygame.time.set_timer(ENABLE_SOUND_BUTTON,1000,0)
+                    elif alter_over and (sound_rect2.collidepoint(event.x * screen.get_width(),event.y * screen.get_height()) or mute_rect2.collidepoint(event.x * screen.get_width(),event.y * screen.get_height())):
                         SOUND = not SOUND
-                        volume_redraw2()
                         if SOUND and not SOUND_PLAYING:
                             SOUND_PLAYING = True
-                            pygame.mixer.music.play(-1)
+                            if SOUND_VOLUME==0:
+                                SOUND_VOLUME = PREV_SOUND_VOLUME
+                            pygame.mixer.music.set_volume(SOUND_VOLUME/100)
                         elif not SOUND and SOUND_PLAYING:
                             SOUND_PLAYING = False
-                            pygame.mixer.music.stop()
+                            PREV_SOUND_VOLUME = SOUND_VOLUME
+                            SOUND_VOLUME = 0
+                            pygame.mixer.music.set_volume(0)
+                        volume_redraw2()
+                    elif (not alter_over and sound_rect2_alter.collidepoint(event.x * screen.get_width(),event.y * screen.get_height())) or (not alter_over and mute_rect2_alter.collidepoint(event.x * screen.get_width(),event.y * screen.get_height())):
+                        SOUND = not SOUND
+                        if SOUND and not SOUND_PLAYING:
+                            SOUND_PLAYING = True
+                            if SOUND_VOLUME==0:
+                                SOUND_VOLUME = PREV_SOUND_VOLUME
+                            pygame.mixer.music.set_volume(SOUND_VOLUME/100)
+                        elif not SOUND and SOUND_PLAYING:
+                            SOUND_PLAYING = False
+                            PREV_SOUND_VOLUME = SOUND_VOLUME
+                            SOUND_VOLUME = 0
+                            pygame.mixer.music.set_volume(0)
+                        volume_redraw_alter2()
+                    elif not alter_over and SOUND_RECT2.collidepoint(event.x * screen.get_width(), event.y * screen.get_height()):
+                        SOUND_VOLUME = (SOUND_RECT2[1]+SOUND_RECT2[3]) - (event.y * screen.get_height())
+                        if SOUND_VOLUME==0:
+                            SOUND = not SOUND
+                            SOUND_PLAYING = False
+                        else:
+                            SOUND = True
+                            SOUND_PLAYING = True
+                        pygame.mixer.music.set_volume(SOUND_VOLUME/100)
+                        volume_redraw_alter2()
                 elif event.type == pygame.FINGERUP:
+                    DRAG_ALLOWED = False
                     try:
                         down_fingers.remove(event.finger_id)
                     except:
@@ -1689,17 +2168,53 @@ async def main():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_m:
                         SOUND = not SOUND
-                        volume_redraw2()
                         if SOUND and not SOUND_PLAYING:
                             SOUND_PLAYING = True
-                            pygame.mixer.music.play(-1)
+                            if SOUND_VOLUME==0:
+                                SOUND_VOLUME = PREV_SOUND_VOLUME
+                            pygame.mixer.music.set_volume(SOUND_VOLUME/100)
                         elif not SOUND and SOUND_PLAYING:
                             SOUND_PLAYING = False
-                            pygame.mixer.music.stop()
+                            PREV_SOUND_VOLUME = SOUND_VOLUME
+                            SOUND_VOLUME = 0
+                            pygame.mixer.music.set_volume(0)
+                        if alter_over:
+                            volume_redraw2()
+                        else:
+                            volume_redraw_alter2()
+                elif event.type == pygame.MOUSEBUTTONUP:
+                    DRAG_ALLOWED = False
+                elif not alter_over and event.type == pygame.MOUSEMOTION and DRAG_ALLOWED:
+                    mouse_x, mouse_y = event.pos
+                    SOUND_VOLUME = (SOUND_RECT2[1]+SOUND_RECT2[3]) - mouse_y
+                    if SOUND_VOLUME!=PREV_SOUND_VOLUME:
+                        if SOUND_VOLUME<0:
+                            SOUND_VOLUME=0
+                        if SOUND_VOLUME>100:
+                            SOUND_VOLUME=100
+                        if SOUND_VOLUME==0:
+                            SOUND = False
+                            SOUND_PLAYING = False
+                        else:
+                            SOUND = True
+                            SOUND_PLAYING = True
+                        PREV_SOUND_VOLUME = SOUND_VOLUME
+                        pygame.mixer.music.set_volume(SOUND_VOLUME/100)
+                        volume_redraw_alter2()
+                else:
+                    if (sound_rect2.collidepoint(pos[0],pos[1])) or (mute_rect2.collidepoint(pos[0],pos[1])) and altered_allowed:
+                        altered_allowed = False
+                        alter_over = False
+                        volume_redraw_alter2()
+                    elif not sound_alter_rect2.collidepoint(pos[0],pos[1]) and not alter_over:
+                        altered_allowed = True
+                        alter_over = True
+                        screen.blit(main_menu_bg,sound_alter_rect2,sound_alter_rect2)
+                        volume_redraw2()
 
         if info:
             pos = pygame.mouse.get_pos()
-            if pos[0]>20 and pos[0]<90 and pos[1]>20 and pos[1]<70 or sound_rect2.collidepoint(pos[0],pos[1]) or mute_rect2.collidepoint(pos[0],pos[1]) or (pos[0]>202 and pos[0]<272 and pos[1]>560 and pos[1]<610 and on_page!=1) or (pos[0]>752 and pos[0]<822 and pos[1]>560 and pos[1]<610 and on_page!=3) or (pos[0]>722 and pos[0]<822 and pos[1]>560 and pos[1]<610 and on_page==3):
+            if pos[0]>20 and pos[0]<90 and pos[1]>20 and pos[1]<70 or (pos[0]>202 and pos[0]<272 and pos[1]>560 and pos[1]<610 and on_page!=1) or (pos[0]>752 and pos[0]<822 and pos[1]>560 and pos[1]<610 and on_page!=3) or (pos[0]>722 and pos[0]<822 and pos[1]>560 and pos[1]<610 and on_page==3) or (alter_over and sound_rect2.collidepoint(pos[0],pos[1])) or (alter_over and mute_rect2.collidepoint(pos[0],pos[1])) or (not alter_over and sound_rect2_alter.collidepoint(pos[0],pos[1])) or (not alter_over and SOUND_RECT2.collidepoint(pos[0],pos[1])) or (not alter_over and pos[0]>(sound_rect2_alter[0]+20) and pos[0]<(sound_rect2_alter[0]+40) and pos[1]>(sound_rect2_alter[1]+153-SOUND_VOLUME) and pos[1]<(sound_rect2_alter[1]+173-SOUND_VOLUME)):
                 pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
             else:
                 pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
@@ -1707,6 +2222,8 @@ async def main():
 
             for event in events:
                 if event.type == pygame.MOUSEBUTTONDOWN and not ignore_mouse:
+                    if not alter_over and event.pos[0]>(sound_rect2_alter[0]+20) and event.pos[0]<(sound_rect2_alter[0]+40) and event.pos[1]>(sound_rect2_alter[1]+153-SOUND_VOLUME) and event.pos[1]<(sound_rect2_alter[1]+173-SOUND_VOLUME):
+                        DRAG_ALLOWED = True
                     if event.pos[0]>20 and event.pos[0]<90 and event.pos[1]>20 and event.pos[1]<70:
                         main_menu = True
                         leaderboard_screen = False
@@ -1720,12 +2237,17 @@ async def main():
                         volume_redraw2()
                         if SOUND and not SOUND_PLAYING:
                             SOUND_PLAYING = True
-                            pygame.mixer.music.play(-1)
+                            if SOUND_VOLUME==0:
+                                SOUND_VOLUME = PREV_SOUND_VOLUME
+                            pygame.mixer.music.set_volume(SOUND_VOLUME/100)
                         elif not SOUND and SOUND_PLAYING:
                             SOUND_PLAYING = False
-                            pygame.mixer.music.stop()
+                            PREV_SOUND_VOLUME = SOUND_VOLUME
+                            SOUND_VOLUME = 0
+                            pygame.mixer.music.set_volume(0)
                     elif (event.pos[0]>202 and event.pos[0]<272 and event.pos[1]>560 and event.pos[1]<610 and on_page!=1):
                         on_page-=1
+                        loading()
                         if on_page==2:
                             reset2()
                             instruction_num = 0
@@ -1734,6 +2256,7 @@ async def main():
                         information()
                     elif (event.pos[0]>752 and event.pos[0]<822 and event.pos[1]>560 and event.pos[1]<610 and on_page!=3):
                         on_page+=1
+                        loading()
                         if on_page==2:
                             reset2()
                             instruction_num = 0
@@ -1747,9 +2270,47 @@ async def main():
                         loading()
                         reset()
                         if SOUND_PLAYING:
+                            PREV_SOUND_VOLUME = SOUND_VOLUME
+                            SOUND_VOLUME = 0
                             pygame.mixer.music.stop()
                             SOUND_PLAYING = False
                         await load_game()
+                    elif alter_over and (sound_rect2.collidepoint(event.pos[0],event.pos[1]) or mute_rect2.collidepoint(event.pos[0],event.pos[1])):
+                        SOUND = not SOUND
+                        if SOUND and not SOUND_PLAYING:
+                            SOUND_PLAYING = True
+                            if SOUND_VOLUME==0:
+                                SOUND_VOLUME = PREV_SOUND_VOLUME
+                            pygame.mixer.music.set_volume(SOUND_VOLUME/100)
+                        elif not SOUND and SOUND_PLAYING:
+                            SOUND_PLAYING = False
+                            PREV_SOUND_VOLUME = SOUND_VOLUME
+                            SOUND_VOLUME = 0
+                            pygame.mixer.music.set_volume(0)
+                        volume_redraw2()
+                    elif (not alter_over and sound_rect2_alter.collidepoint(event.pos[0],event.pos[1])) or (not alter_over and mute_rect2_alter.collidepoint(event.pos[0],event.pos[1])):
+                        SOUND = not SOUND
+                        if SOUND and not SOUND_PLAYING:
+                            SOUND_PLAYING = True
+                            if SOUND_VOLUME==0:
+                                SOUND_VOLUME = PREV_SOUND_VOLUME
+                            pygame.mixer.music.set_volume(SOUND_VOLUME/100)
+                        elif not SOUND and SOUND_PLAYING:
+                            SOUND_PLAYING = False
+                            PREV_SOUND_VOLUME = SOUND_VOLUME
+                            SOUND_VOLUME = 0
+                            pygame.mixer.music.set_volume(0)
+                        volume_redraw_alter2()
+                    elif not alter_over and SOUND_RECT2.collidepoint(event.pos[0], event.pos[1]):
+                        SOUND_VOLUME = (SOUND_RECT2[1]+SOUND_RECT2[3]) - event.pos[1]
+                        if SOUND_VOLUME==0:
+                            SOUND = not SOUND
+                            SOUND_PLAYING = False
+                        else:
+                            SOUND = True
+                            SOUND_PLAYING = True
+                        pygame.mixer.music.set_volume(SOUND_VOLUME/100)
+                        volume_redraw_alter2()
                 elif event.type == pygame.FINGERDOWN:
                     if event.finger_id in down_fingers:
                         continue
@@ -1762,21 +2323,9 @@ async def main():
                         loading()
                         hscore_thread = False
                         main_page()
-                    elif sound_rect2.collidepoint((event.x * screen.get_width()),(event.y * screen.get_height())) or mute_rect2.collidepoint((event.x * screen.get_width()),(event.y * screen.get_height())):
-                        if done_recently:
-                            continue
-                        done_recently = True
-                        pygame.time.set_timer(ENABLE_SOUND_BUTTON,1000,0)
-                        SOUND = not SOUND
-                        volume_redraw2()
-                        if SOUND and not SOUND_PLAYING:
-                            SOUND_PLAYING = True
-                            pygame.mixer.music.play(-1)
-                        elif not SOUND and SOUND_PLAYING:
-                            SOUND_PLAYING = False
-                            pygame.mixer.music.stop()
                     elif ((event.x * screen.get_width())>202 and (event.x * screen.get_width())<272 and (event.y * screen.get_height())>560 and (event.y * screen.get_height())<610 and on_page!=1):
                         on_page-=1
+                        loading()
                         if on_page==2:
                             reset2()
                             instruction_num = 0
@@ -1785,6 +2334,7 @@ async def main():
                         information()
                     elif ((event.x * screen.get_width())>752 and (event.x * screen.get_width())<822 and (event.y * screen.get_height())>560 and (event.y * screen.get_height())<610 and on_page!=3):
                         on_page+=1
+                        loading()
                         if on_page==2:
                             reset2()
                             instruction_num = 0
@@ -1798,9 +2348,47 @@ async def main():
                         loading()
                         reset()
                         if SOUND_PLAYING:
+                            PREV_SOUND_VOLUME = SOUND_VOLUME
+                            SOUND_VOLUME = 0
                             pygame.mixer.music.stop()
                             SOUND_PLAYING = False
                         await load_game()
+                    elif alter_over and (sound_rect2.collidepoint(event.x * screen.get_width(),event.y * screen.get_height()) or mute_rect2.collidepoint(event.x * screen.get_width(),event.y * screen.get_height())):
+                        SOUND = not SOUND
+                        if SOUND and not SOUND_PLAYING:
+                            SOUND_PLAYING = True
+                            if SOUND_VOLUME==0:
+                                SOUND_VOLUME = PREV_SOUND_VOLUME
+                            pygame.mixer.music.set_volume(SOUND_VOLUME/100)
+                        elif not SOUND and SOUND_PLAYING:
+                            SOUND_PLAYING = False
+                            PREV_SOUND_VOLUME = SOUND_VOLUME
+                            SOUND_VOLUME = 0
+                            pygame.mixer.music.set_volume(0)
+                        volume_redraw2()
+                    elif (not alter_over and sound_rect2_alter.collidepoint(event.x * screen.get_width(),event.y * screen.get_height())) or (not alter_over and mute_rect2_alter.collidepoint(event.x * screen.get_width(),event.y * screen.get_height())):
+                        SOUND = not SOUND
+                        if SOUND and not SOUND_PLAYING:
+                            SOUND_PLAYING = True
+                            if SOUND_VOLUME==0:
+                                SOUND_VOLUME = PREV_SOUND_VOLUME
+                            pygame.mixer.music.set_volume(SOUND_VOLUME/100)
+                        elif not SOUND and SOUND_PLAYING:
+                            SOUND_PLAYING = False
+                            PREV_SOUND_VOLUME = SOUND_VOLUME
+                            SOUND_VOLUME = 0
+                            pygame.mixer.music.set_volume(0)
+                        volume_redraw_alter2()
+                    elif not alter_over and SOUND_RECT2.collidepoint(event.x * screen.get_width(), event.y * screen.get_height()):
+                        SOUND_VOLUME = (SOUND_RECT2[1]+SOUND_RECT2[3]) - (event.y * screen.get_height())
+                        if SOUND_VOLUME==0:
+                            SOUND = not SOUND
+                            SOUND_PLAYING = False
+                        else:
+                            SOUND = True
+                            SOUND_PLAYING = True
+                        pygame.mixer.music.set_volume(SOUND_VOLUME/100)
+                        volume_redraw_alter2()
                     
                     #finger motion
                     if (info_bg_rect_left.collidepoint(event.x * screen.get_width(), event.y * screen.get_height())) and ((still_man2 and on_page==1) or (still_man2 and on_page==2 and left_allowed)):
@@ -1844,6 +2432,7 @@ async def main():
                         elif on_page==2:
                             draw_playable2()
                 elif event.type == pygame.FINGERUP:
+                    DRAG_ALLOWED = False
                     try:
                         down_fingers.remove(event.finger_id)
                     except:
@@ -1851,13 +2440,20 @@ async def main():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_m:
                         SOUND = not SOUND
-                        volume_redraw2()
                         if SOUND and not SOUND_PLAYING:
                             SOUND_PLAYING = True
-                            pygame.mixer.music.play(-1)
+                            if SOUND_VOLUME==0:
+                                SOUND_VOLUME = PREV_SOUND_VOLUME
+                            pygame.mixer.music.set_volume(SOUND_VOLUME/100)
                         elif not SOUND and SOUND_PLAYING:
                             SOUND_PLAYING = False
-                            pygame.mixer.music.stop()
+                            PREV_SOUND_VOLUME = SOUND_VOLUME
+                            SOUND_VOLUME = 0
+                            pygame.mixer.music.set_volume(0)
+                        if alter_over:
+                            volume_redraw2()
+                        else:
+                            volume_redraw_alter2()
                     elif (event.key == pygame.K_LEFT and still_man2 and on_page==1) or (event.key == pygame.K_LEFT and still_man2 and on_page==2 and left_allowed):
                         still_man2 = False
                         left2 = True
@@ -1906,6 +2502,35 @@ async def main():
                         draw_playable1()
                     elif on_page==2:
                         draw_playable2()
+                elif event.type == pygame.MOUSEBUTTONUP:
+                    DRAG_ALLOWED = False
+                elif not alter_over and event.type == pygame.MOUSEMOTION and DRAG_ALLOWED:
+                    mouse_x, mouse_y = event.pos
+                    SOUND_VOLUME = (SOUND_RECT2[1]+SOUND_RECT2[3]) - mouse_y
+                    if SOUND_VOLUME!=PREV_SOUND_VOLUME:
+                        if SOUND_VOLUME<0:
+                            SOUND_VOLUME=0
+                        if SOUND_VOLUME>100:
+                            SOUND_VOLUME=100
+                        if SOUND_VOLUME==0:
+                            SOUND = False
+                            SOUND_PLAYING = False
+                        else:
+                            SOUND = True
+                            SOUND_PLAYING = True
+                        PREV_SOUND_VOLUME = SOUND_VOLUME
+                        pygame.mixer.music.set_volume(SOUND_VOLUME/100)
+                        volume_redraw_alter2()
+                else:
+                    if (sound_rect2.collidepoint(pos[0],pos[1])) or (mute_rect2.collidepoint(pos[0],pos[1])) and altered_allowed:
+                        altered_allowed = False
+                        alter_over = False
+                        volume_redraw_alter2()
+                    elif not sound_alter_rect2.collidepoint(pos[0],pos[1]) and not alter_over:
+                        altered_allowed = True
+                        alter_over = True
+                        screen.blit(main_menu_bg,sound_alter_rect2,sound_alter_rect2)
+                        volume_redraw2()
 
 
         for event in events:
