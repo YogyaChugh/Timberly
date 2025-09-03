@@ -1595,8 +1595,6 @@ while True:
                     loading()
                     reset()
                     if SOUND_PLAYING:
-                        PREV_SOUND_VOLUME = SOUND_VOLUME
-                        SOUND_VOLUME = 0
                         pygame.mixer.music.stop()
                         SOUND_PLAYING = False
                     load_game()
@@ -1863,8 +1861,6 @@ while True:
                     loading()
                     reset()
                     if SOUND_PLAYING:
-                        PREV_SOUND_VOLUME = SOUND_VOLUME
-                        SOUND_VOLUME = 0
                         pygame.mixer.music.stop()
                         SOUND_PLAYING = False
                     load_game()
