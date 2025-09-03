@@ -1,0 +1,5 @@
+.env/
+trial/
+build/
+__pycache__/
+pygame_vkeyboard/__pycache__/
