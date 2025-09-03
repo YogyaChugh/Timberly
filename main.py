@@ -1096,6 +1096,9 @@ while True:
                         except:
                             pass
                         hscore_thread = False
+                    if SOUND:
+                        SOUND_PLAYING = True
+                        pygame.mixer.music.play(-1)
                     main()
                 elif event.key == pygame.K_m:
                     SOUND = not SOUND
@@ -1179,7 +1182,7 @@ while True:
                 elif not sound_alter_rect2.collidepoint(pos[0],pos[1]) and not alter_over:
                     altered_allowed = True
                     alter_over = True
-                    screen.blit(main_menu_bg,sound_alter_rect2,sound_alter_rect2)
+                    screen.blit(bg,sound_alter_rect2,sound_alter_rect2)
                     volume_redraw2()
             if event.type == ANIMATE_MAN:
                 still_man = True
@@ -1392,6 +1395,49 @@ while True:
                     information()
                 else:
                     allow_textinput = False
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN and textinput.value!="" and allow_textinput:
+                    allow_textinput = False
+                    show_name_input = False
+                    answer = str(textinput.value).lower().title()
+                    try:
+                        requests.post("https://yogya.pythonanywhere.com/register_user",data={'id': USER_ID,'name': answer})
+                        with open(os.path.join(data_dir,"user.env"),'w') as file:
+                            file.write(str({'ID': USER_ID, 'NAME': answer, 'HIGH SCORE': HIGH_SCORE}))
+                        USER_NAME = answer
+                    except:
+                        count = 5
+                        i = 0
+                        while True:
+                            screen.blit(main_menu_bg,(0,0))
+                            pygame.draw.rect(screen,(169,122,87),(30,200,930,207),border_radius=30)
+                            pygame.draw.rect(screen,(79,32,15),(30,200,930,207),15,30)
+                            if i%30==0:
+                                count-=1
+                            text2 = font.render(f"Restart for online !! Offline Mode Initiating ... {count}",True,(0,0,0))
+                            screen.blit(note,(430,230))
+                            screen.blit(text,(70,280))
+                            screen.blit(text2,(70,330))
+                            pygame.display.update()
+                            i+=1
+                            if i==150:
+                                break
+                            events = pygame.event.get()
+                            for event in events:
+                                if event.type ==  pygame.QUIT:
+                                    sys.exit()
+                            clock.tick(30)
+                    info = True
+                    if SOUND and not SOUND_PLAYING:
+                        SOUND_PLAYING = True
+                        pygame.mixer.music.set_volume(SOUND_VOLUME/100)
+                    elif not SOUND and SOUND_PLAYING:
+                        SOUND_PLAYING = False
+                        pygame.mixer.music.set_volume(0)
+                    reset()
+                    pygame.mixer.music.play(-1)
+                    loading()
+                    information()
     if on_credits_page:
         
         screen.blit(frames[frame_num], (50, 80))
@@ -1549,7 +1595,9 @@ while True:
                     loading()
                     reset()
                     if SOUND_PLAYING:
-                        pygame.mixer.music.set_volume(0)
+                        PREV_SOUND_VOLUME = SOUND_VOLUME
+                        SOUND_VOLUME = 0
+                        pygame.mixer.music.stop()
                         SOUND_PLAYING = False
                     load_game()
                 elif (event.pos[0]>507 and event.pos[0]<720 and event.pos[1]>400 and event.pos[1]<450):
@@ -1815,7 +1863,9 @@ while True:
                     loading()
                     reset()
                     if SOUND_PLAYING:
-                        pygame.mixer.music.set_volume(0)
+                        PREV_SOUND_VOLUME = SOUND_VOLUME
+                        SOUND_VOLUME = 0
+                        pygame.mixer.music.stop()
                         SOUND_PLAYING = False
                     load_game()
                 elif alter_over and (sound_rect2.collidepoint(event.pos[0],event.pos[1]) or mute_rect2.collidepoint(event.pos[0],event.pos[1])):
