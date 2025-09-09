@@ -93,6 +93,7 @@ timberly = pygame.image.load(os.path.abspath("assets/timberly.png"))
 # timberly = pygame.transform.scale(timberly,(350,525))
 main_menu_bg = pygame.image.load(os.path.abspath("assets/bgg.png"))
 landing_bg = pygame.image.load(os.path.abspath("assets/landing_bg.png"))
+store_background = pygame.image.load(os.path.abspath("assets/store_room.png"))
 screen.blit(landing_bg,(0,0))
 screen.blit(timberly,(292,30))
 pygame.display.update()
@@ -101,6 +102,12 @@ show_name_input = False
 text_dict = {}
 info_bg_rect_left = pygame.Rect(255,155,250,333.5)
 info_bg_rect_right = pygame.Rect(505,155,250,333.5)
+
+COLORS = ["red","green"]
+PRICES = {"red": 0, "green": 2000}
+UNLOCKED = []
+man_images = {"red": {}, "green": {}}
+COLOR_OF_MAN = "green"
 
 #auio
 pygame.mixer.music.load(os.path.abspath("audio/magic_forest.ogg"))
@@ -113,33 +120,44 @@ bg2 = pygame.transform.scale(bg, (500,333.5))
 tree = pygame.image.load(os.path.abspath("assets/tree.png"))
 tree2 = pygame.transform.scale(tree, (100,315))
 tree_log = pygame.image.load(os.path.abspath("assets/log.png"))
-man_up_left = pygame.image.load(os.path.abspath("assets/man_up_left.png"))
-man_down_left = pygame.image.load(os.path.abspath("assets/man_down_left.png"))
-man_up_right = pygame.image.load(os.path.abspath("assets/man_up_right.png"))
-man_down_right = pygame.image.load(os.path.abspath("assets/man_down_right.png"))
-man_up_left2 = pygame.transform.scale(man_up_left,(100,150))
-man_down_left2 = pygame.transform.scale(man_down_left,(100,150))
-man_up_right2 = pygame.transform.scale(man_up_right,(100,150))
-man_down_right2 = pygame.transform.scale(man_down_right,(100,150))
+
+for i in COLORS:
+    man_images[i]["MAN_UP_LEFT"] = pygame.image.load(os.path.abspath(f"assets/{i}/man_up_left.png"))
+    man_images[i]["MAN_DOWN_LEFT"] = pygame.image.load(os.path.abspath(f"assets/{i}/man_down_left.png"))
+    man_images[i]["MAN_UP_RIGHT"] = pygame.image.load(os.path.abspath(f"assets/{i}/man_up_right.png"))
+    man_images[i]["MAN_DOWN_RIGHT"] = pygame.image.load(os.path.abspath(f"assets/{i}/man_down_right.png"))
+    
+    dead_man = pygame.image.load(os.path.abspath(f"assets/{i}/dead.png"))
+    unchanged = pygame.image.load(os.path.abspath(f"assets/{i}/dead.png"))
+    unchanged = pygame.transform.scale(unchanged,(500,333))
+    unchanged = pygame.transform.rotate(unchanged,10)
+    dead_man = pygame.transform.scale(dead_man,(300,200))
+    dead_man = pygame.transform.rotate(dead_man,10)
+    dead_man_flipped = pygame.image.load(os.path.abspath(f"assets/{i}/dead_flipped.png"))
+    dead_man_flipped = pygame.transform.scale(dead_man_flipped,(300,200))
+    dead_man_flipped = pygame.transform.rotate(dead_man_flipped,-10)
+
+    man_images[i]["DEAD_MAN"] = dead_man
+    man_images[i]["UNCHANGED_DEAD_MAN"] = unchanged
+    man_images[i]["DEAD_MAN_FLIPPED"] = dead_man_flipped
+    
+    man_images[i]["SMILING_MAN"] = pygame.image.load(os.path.abspath(f"assets/{i}/smiling_man.png"))
+
+man_up_left2 = pygame.transform.scale(man_images["red"]["MAN_UP_LEFT"],(100,150))
+man_down_left2 = pygame.transform.scale(man_images["red"]["MAN_DOWN_LEFT"],(100,150))
+man_up_right2 = pygame.transform.scale(man_images["red"]["MAN_UP_RIGHT"],(100,150))
+man_down_right2 = pygame.transform.scale(man_images["red"]["MAN_DOWN_RIGHT"],(100,150))
 branch = pygame.image.load(os.path.abspath("assets/branch.png"))
 branch2 = pygame.transform.scale(branch,(150,30))
 branch_flipped = pygame.image.load(os.path.abspath("assets/branch_flipped.png"))
 branch_flipped2 = pygame.transform.scale(branch_flipped,(150,30))
-dead_man = pygame.image.load(os.path.abspath("assets/dead.png"))
-unchanged = pygame.image.load(os.path.abspath("assets/dead.png"))
-unchanged = pygame.transform.scale(unchanged,(500,333))
-unchanged = pygame.transform.rotate(unchanged,10)
-dead_man = pygame.transform.scale(dead_man,(300,200))
-dead_man = pygame.transform.rotate(dead_man,10)
-dead_man_flipped = pygame.image.load(os.path.abspath("assets/dead_flipped.png"))
-dead_man_flipped = pygame.transform.scale(dead_man_flipped,(300,200))
-dead_man_flipped = pygame.transform.rotate(dead_man_flipped,-10)
+
+
 squished_img = pygame.image.load(os.path.abspath("assets/squished.png"))
 time_over = pygame.image.load(os.path.abspath("assets/time_over.png"))
 wood2 = pygame.transform.scale(wood,(60,60))
 wood = pygame.transform.scale(wood,(50,50))
 board = pygame.image.load(os.path.abspath("assets/menu.png"))
-smiling_man = pygame.image.load(os.path.abspath("assets/smiling_man.png"))
 github = pygame.image.load(os.path.abspath('assets/github.png'))
 slack = pygame.image.load(os.path.abspath('assets/slack.png'))
 watching_man = pygame.image.load(os.path.abspath("assets/watching_man.png"))
@@ -158,6 +176,8 @@ info_icon_rect = info_icon.get_rect()
 info_icon_rect.topleft = (730, 129)
 volume = pygame.image.load(os.path.abspath("assets/volume.png"))
 mute = pygame.image.load(os.path.abspath("assets/mute2.png"))
+store = pygame.image.load(os.path.abspath("assets/store.png"))
+store_rect = store.get_rect()
 sound_rect1 = volume.get_rect()
 sound_rect1_alter = volume.get_rect()
 sound_rect2 = sound_rect1.copy()
@@ -174,6 +194,7 @@ mute_rect4 = mute_rect1.copy()
 
 sound_rect1.topleft = (728, 519)
 mute_rect1.topleft = (730,524)
+store_rect.topleft = (658, 519)
 
 sound_alter_rect = pygame.Rect(sound_rect1[0]-165,sound_rect1[1],sound_rect1[2]+170,sound_rect1[3])
 
@@ -222,6 +243,7 @@ text = font.render("Internet is required, the first time you run the application
 ANIMATE_MAN = pygame.USEREVENT
 ANIMATE_LOG = pygame.USEREVENT
 ENABLE_SOUND_BUTTON = pygame.USEREVENT
+KEY_PRESSED_STORE = pygame.USEREVENT
 still_man = True
 still_man2 = True
 left = True
@@ -270,12 +292,16 @@ alter_over = False
 SOUND_VOLUME = 100
 PREV_SOUND_VOLUME = 100
 DRAG_ALLOWED = False
+store_open = False
+left_store_pressed = False
+right_store_pressed = False
 
 
 SOUND_RECT = pygame.Rect(sound_rect1_alter[0]+60,sound_rect1_alter[1]+20,100,sound_rect1_alter[3]-40)
 SOUND_RECT2 = pygame.Rect(sound_rect2_alter[0]+20,sound_rect2_alter[1]+53,sound_rect2_alter[2]-40,100)
 
-
+left_store_rect = pygame.draw.circle(screen,(79,32,15),(320,390),30)
+right_store_rect = pygame.draw.circle(screen,(79,32,15),(690,390),30)
 
 async def show_high_score():
     global hscore_thread
@@ -528,23 +554,23 @@ async def load_game():
     if game_running:
         if not still_man:
             if left:
-                screen.blit(man_down_left,(230,370))
+                screen.blit(man_images[COLOR_OF_MAN]["MAN_DOWN_LEFT"],(230,370))
             else:
-                screen.blit(man_down_right,(570,370))
+                screen.blit(man_images[COLOR_OF_MAN]["MAN_DOWN_RIGHT"],(570,370))
         screen.blit(tree, (400,0))
         # screen.blit(bamboo, (300,230))
         if still_man:
             if left:
-                screen.blit(man_up_left,(230,360))
+                screen.blit(man_images[COLOR_OF_MAN]["MAN_UP_LEFT"],(230,360))
             else:
-                screen.blit(man_up_right,(570,360))
+                screen.blit(man_images[COLOR_OF_MAN]["MAN_UP_RIGHT"],(570,360))
         screen.blit(tree_log,log_location)
     else:
         screen.blit(tree, (400,0))
         if left:
-            screen.blit(dead_man,(120,490))
+            screen.blit(man_images[COLOR_OF_MAN]["DEAD_MAN"],(120,490))
         else:
-            screen.blit(dead_man_flipped,(550,490))
+            screen.blit(man_images[COLOR_OF_MAN]["DEAD_MAN_FLIPPED"],(550,490))
         pygame.display.update()
         await asyncio.sleep(1)
     pygame.draw.rect(screen,(169,122,87),(20,20,220,50),border_radius=5)
@@ -665,7 +691,7 @@ def game_over_page():
     screen.blit(wood2,(aa-(10*len(str(score))),430))
     screen.blit(score_text,(bb-(10*len(str(score))),436))
     if squished:
-        screen.blit(unchanged,(220,100))
+        screen.blit(man_images[COLOR_OF_MAN]["UNCHANGED_DEAD_MAN"],(220,100))
         screen.blit(squished_img,(200,-100))
     else:
         screen.blit(time_over,(300,30))
@@ -689,6 +715,9 @@ def volume_redraw():
         screen.blit(volume,sound_rect1)
     else:
         screen.blit(mute,mute_rect1)
+    pygame.draw.rect(screen,(169,122,87),(store_rect[0]-5,store_rect[1],store_rect[2]+20,store_rect[3]+10),border_radius=5)
+    pygame.draw.rect(screen,(79,32,15),(store_rect[0]-5,store_rect[1],store_rect[2]+20,store_rect[3]+10),5,5)
+    screen.blit(store, (store_rect[0]+5,store_rect[1]+5,store_rect[2]+10,store_rect[3]+10))
     pygame.display.update()
 
 def volume_redraw_alter():
@@ -741,7 +770,7 @@ def main_page():
     global hscore_thread, thread_for_hscore
     screen.blit(main_menu_bg,(0,0))
     screen.blit(board,(386,-20))
-    screen.blit(smiling_man,(70,300))
+    screen.blit(man_images[COLOR_OF_MAN]["SMILING_MAN"],(70,300))
     if USER_NAME is not None:
         screen.blit(cloud,(0,80))
         # screen.blit(wood2,(180,135))
@@ -779,6 +808,10 @@ def main_page():
         pygame.draw.rect(screen,(169,122,87),(10,10,260,60),border_radius=30)
         pygame.draw.rect(screen,(79,32,15),(10,10,260,60),8,30)
         screen.blit(offline,(37,22))
+    pygame.draw.rect(screen,(169,122,87),(store_rect[0]-5,store_rect[1],store_rect[2]+20,store_rect[3]+10),border_radius=5)
+    pygame.draw.rect(screen,(79,32,15),(store_rect[0]-5,store_rect[1],store_rect[2]+20,store_rect[3]+10),5,5)
+    screen.blit(store, (store_rect[0]+5,store_rect[1]+5,store_rect[2]+10,store_rect[3]+10))
+    pygame.display.update()
     if online_game and not hscore_thread:
         asyncio.create_task(show_high_score())
     pygame.display.update()
@@ -876,6 +909,28 @@ def information():
         textji = font3.render("PLAY !",True,(0,0,0))
         screen.blit(textji,(745,568))
     pygame.display.update()
+def store_page():
+    global left_store_pressed, right_store_pressed
+    screen.blit(store_background,(0,0))
+    pygame.draw.rect(screen,(169,122,87),(20,20,70,50),border_radius=10)
+    pygame.draw.rect(screen,(79,32,15),(20,20,70,50),2,10)
+    screen.blit(aleft,(40,30))
+    if COLOR_OF_MAN!=COLORS[0]:
+        if left_store_pressed:
+            pygame.draw.circle(screen,(79,32,15),(320,390),30)
+            screen.blit(aleft,(305,375))
+        else:
+            pygame.draw.circle(screen,(169,122,87),(320,390),30)
+            screen.blit(aleft,(305,375))
+    if COLOR_OF_MAN!=COLORS[-1]:
+        if right_store_pressed:
+            pygame.draw.circle(screen,(79,32,15),(690,390),30)
+            screen.blit(aright,(675,375))
+        else:
+            pygame.draw.circle(screen,(169,122,87),(690,390),30)
+            screen.blit(aright,(675,375))
+    screen.blit(man_images[COLOR_OF_MAN]["SMILING_MAN"],(395,210))
+    pygame.display.update()
 def draw_playable1():
     textji = font2.render("Tap left/right of playable for Android!",True,(0,0,0))
     screen.blit(textji,(280,572))
@@ -968,8 +1023,8 @@ def name_input2():
 
 
 async def main():
-    global application_allowed,alter_over, altered_allowed, DRAG_ALLOWED, SOUND_VOLUME, PREV_SOUND_VOLUME, ignore_mouse,just_did, screen, logo, wood, clock, font, loading_man, timberly, main_menu_bg, landing_bg, USER_ID, USER_NAME, HIGH_SCORE, online_game, show_name_input, dead_sound, time_up_sound, chop_sound, bg, bg2, tree, tree2, tree_log, man_up_left, man_down_left, man_up_right, man_down_right, man_up_left2, man_down_left2, man_up_right2, man_down_right2, branch, branch2, branch_flipped, branch_flipped2, dead_man, unchanged, dead_man_flipped, squished_img, time_over, wood2, board, smiling_man, github, slack, watching_man, tick, cloud, leaderboard_img, info_panel, aleft, aleft2, aright, aright2, wave, info_icon, info_icon_rect, volume, mute, sound_rect1, sound_rect2, sound_rect3, sound_rect4, mute_rect1, mute_rect2, mute_rect3, mute_rect4, font2, font3, font4, font5, font6, font7, font8, font9, font10, gmail, email, email_rect, score_, menu_return1, menu_return2, play, leader, agi, offline, user_name1, note, text, manager, ANIMATE_MAN, ANIMATE_LOG, still_man, still_man2, left, left2, do_action, branch_locs, branch_locs2, game_running, score, leaderboard_screen, BASE_BRANCH_LOC, TOTAL_BRANCHES, time_left, transparency, just_game_over, main_menu, squished, doit, score_updated, is_there_a_problem, log_location, val, credit, credit_rect, info, timer_started, SOUND, SOUND_PLAYING, on_credits_page, hscore_thread, thread_for_hscore, leaderboard_thread, thread_for_leaderboard, on_page, left_allowed, right_allowed, instruction_num, game_over_screen, prev_branch, again_call_it, previous_text, done_recently, SOUND_RECT, sound_alter_rect, sound_alter_rect2, sound_rect1_alter, sound_rect2_alter, mute_rect1_alter, mute_rect2_alter
-    show_name_input = True
+    global application_allowed, LOGS_COLLECTED,alter_over, COLOR_OF_MAN, COLORS,left_store_rect, right_store_rect, altered_allowed,store_open, DRAG_ALLOWED, SOUND_VOLUME, PREV_SOUND_VOLUME, ignore_mouse,just_did, screen, logo, wood, clock, font, loading_man, timberly, main_menu_bg, landing_bg, USER_ID, USER_NAME, HIGH_SCORE, online_game, show_name_input, dead_sound, time_up_sound, chop_sound, bg, bg2, tree, tree2, tree_log, man_up_left2, man_down_left2, man_up_right2, man_down_right2, branch, branch2, branch_flipped, branch_flipped2, squished_img, time_over, wood2, board, github, slack, watching_man, tick, cloud, leaderboard_img, info_panel, aleft, aleft2, aright, aright2, wave, info_icon, info_icon_rect, volume, mute, sound_rect1, sound_rect2, sound_rect3, sound_rect4, mute_rect1, mute_rect2, mute_rect3, mute_rect4, font2, font3, font4, font5, font6, font7, font8, font9, font10, gmail, email, email_rect, score_, menu_return1, menu_return2, play, leader, agi, offline, user_name1, note, text, manager, ANIMATE_MAN, ANIMATE_LOG, still_man, still_man2, left, left2, do_action, branch_locs, branch_locs2, game_running, score, leaderboard_screen, BASE_BRANCH_LOC, TOTAL_BRANCHES, time_left, transparency, just_game_over, main_menu, squished, doit, score_updated, is_there_a_problem, log_location, val, credit, credit_rect, info, timer_started, SOUND, SOUND_PLAYING, on_credits_page, hscore_thread, thread_for_hscore, leaderboard_thread, thread_for_leaderboard, on_page, left_allowed, right_allowed, instruction_num, game_over_screen, prev_branch, again_call_it, previous_text, done_recently, SOUND_RECT, sound_alter_rect, sound_alter_rect2, sound_rect1_alter, sound_rect2_alter, mute_rect1_alter, mute_rect2_alter
+    show_name_input = False
     down_fingers = []
     try:
         bb = something_todo.get("https://www.example.com")
@@ -1119,9 +1174,6 @@ async def main():
                 elif event.type == pygame.FINGERDOWN:
                     if not alter_over and (event.x * screen.get_width())>(sound_rect2_alter[0]+20) and (event.x * screen.get_width())<(sound_rect2_alter[0]+40) and (event.y * screen.get_height())>(sound_rect2_alter[1]+153-SOUND_VOLUME) and (event.y * screen.get_height())<(sound_rect2_alter[1]+173-SOUND_VOLUME):
                         DRAG_ALLOWED = True
-                    if event.finger_id in down_fingers:
-                        continue
-                    down_fingers.append(event.finger_id)
                     if alter_over and (sound_rect2.collidepoint((event.x * screen.get_width()),(event.y * screen.get_height())) or mute_rect2.collidepoint((event.x * screen.get_width()),(event.y * screen.get_height()))):
                         SOUND = not SOUND
                         if SOUND and not SOUND_PLAYING:
@@ -1159,6 +1211,9 @@ async def main():
                         pygame.mixer.music.set_volume(SOUND_VOLUME/100)
                         volume_redraw_alter2()
                     else:
+                        if event.finger_id in down_fingers:
+                            continue
+                        down_fingers.append(event.finger_id)
                         if ((event.x * screen.get_width())<(screen.get_width()/2)) and still_man:
                             if not timer_started:
                                 timer_started = True
@@ -1254,6 +1309,7 @@ async def main():
                 game_over_page()
                 game_over_screen = True
         if game_over_screen:
+            LOGS_COLLECTED+=score
             if online_game:
                 if score>HIGH_SCORE:
                     some_text = font7.render("HIGH SCORE !!",True,(0,0,0))
@@ -1724,9 +1780,8 @@ async def main():
                 elif event.type == pygame.FINGERDOWN:
                     if not alter_over and event.pos[0]>(sound_rect2_alter[0]+20) and event.pos[0]<(sound_rect2_alter[0]+40) and event.pos[1]>(sound_rect2_alter[1]+153-SOUND_VOLUME) and event.pos[1]<(sound_rect2_alter[1]+173-SOUND_VOLUME):
                         DRAG_ALLOWED = True
-                    if event.finger_id in down_fingers:
-                        continue
-                    down_fingers.append(event.finger_id)
+                    if event.finger_id not in down_fingers:
+                        down_fingers.append(event.finger_id)
                     if ((event.x * screen.get_width())>450 and (event.x * screen.get_width())<600 and (event.y * screen.get_height())>260 and (event.y * screen.get_height())<310):
                         js.window.open("https://github.com/YogyaChugh/Timberly.git")
                     elif ((event.x * screen.get_width())>610 and (event.x * screen.get_width())<760 and (event.y * screen.get_height())>260 and (event.y * screen.get_height())<310):
@@ -1854,14 +1909,17 @@ async def main():
             pos = pygame.mouse.get_pos()
             in_one = False
             for r in rects:
-                if (pos[0]>r[0] and pos[0]<r[0]+r[2] and pos[1]>r[1] and pos[1]<r[1]+r[3]):
+                if ((pos[0]>r[0] and pos[0]<r[0]+r[2] and pos[1]>r[1] and pos[1]<r[1]+r[3]) or (alter_over and (pos[0]>store_rect[0]-5 and pos[0]<(store_rect[0]-5+store_rect[2]+20) and pos[1]>store_rect[1] and pos[1]<(store_rect[1]+store_rect[3]+10)))):
                     in_one = True
                     pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
+                    pygame.display.update()
             if info_icon_rect.collidepoint(pos[0],pos[1]) or (alter_over and sound_rect1.collidepoint(pos[0],pos[1])) or (alter_over and mute_rect1.collidepoint(pos[0],pos[1])) or (not alter_over and sound_rect1_alter.collidepoint(pos[0],pos[1])) or (not alter_over and SOUND_RECT.collidepoint(pos[0],pos[1])) or (not alter_over and pos[0]>(sound_rect1_alter[0]+55+SOUND_VOLUME) and pos[0]<(sound_rect1_alter[0]+75+SOUND_VOLUME) and pos[1]>(sound_rect1_alter[1]+15) and pos[1]<(sound_rect1_alter[1]+35)):
                 in_one = True
                 pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
+                pygame.display.update()
             if not in_one:
                 pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
+                pygame.display.update()
             for event in events:
                 if event.type == pygame.MOUSEBUTTONDOWN and not ignore_mouse:
                     if not alter_over and event.pos[0]>(sound_rect1_alter[0]+55+SOUND_VOLUME) and event.pos[0]<(sound_rect1_alter[0]+75+SOUND_VOLUME) and event.pos[1]>(sound_rect1_alter[1]+15) and event.pos[1]<(sound_rect1_alter[1]+35):
@@ -1872,8 +1930,6 @@ async def main():
                         loading()
                         reset()
                         if SOUND_PLAYING:
-                            PREV_SOUND_VOLUME = SOUND_VOLUME
-                            SOUND_VOLUME = 0
                             pygame.mixer.music.stop()
                             SOUND_PLAYING = False
                         await load_game()
@@ -1928,18 +1984,20 @@ async def main():
                             SOUND_PLAYING = False
                         pygame.mixer.music.set_volume(SOUND_VOLUME/100)
                         volume_redraw_alter()
+                    elif (alter_over and (event.pos[0]>store_rect[0]-5 and event.pos[0]<(store_rect[0]-5+store_rect[2]+20) and event.pos[1]>store_rect[1] and event.pos[1]<(store_rect[1]+store_rect[3]+10))):
+                        pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
+                        main_menu = False
+                        store_open = True
+                        store_page()
                 elif event.type == pygame.FINGERDOWN:
-                    if event.finger_id in down_fingers:
-                        continue
-                    down_fingers.append(event.finger_id)
+                    if event.finger_id not in down_fingers:
+                        down_fingers.append(event.finger_id)
                     if ((event.x * screen.get_width())>527 and (event.x * screen.get_width())<750 and (event.y * screen.get_height())>220 and (event.y * screen.get_height())<270):
                         game_running=True
                         main_menu=False
                         loading()
                         reset()
                         if SOUND_PLAYING:
-                            PREV_SOUND_VOLUME = SOUND_VOLUME
-                            SOUND_VOLUME = 0
                             pygame.mixer.music.stop()
                             SOUND_PLAYING = False
                         await load_game()
@@ -2059,6 +2117,7 @@ async def main():
                         alter_over = True
                         screen.blit(board,sound_alter_rect,(sound_alter_rect[0]-386,sound_alter_rect[1]+20, sound_alter_rect[2],sound_alter_rect[3]))
                         volume_redraw()
+            pygame.display.update()
         if leaderboard_screen:
             pos = pygame.mouse.get_pos()
             if (pos[0]>20 and pos[0]<90 and pos[1]>20 and pos[1]<70) or (alter_over and sound_rect2.collidepoint(pos[0],pos[1])) or (alter_over and mute_rect2.collidepoint(pos[0],pos[1])) or (not alter_over and sound_rect2_alter.collidepoint(pos[0],pos[1])) or (not alter_over and SOUND_RECT2.collidepoint(pos[0],pos[1])) or (not alter_over and pos[0]>(sound_rect2_alter[0]+20) and pos[0]<(sound_rect2_alter[0]+40) and pos[1]>(sound_rect2_alter[1]+153-SOUND_VOLUME) and pos[1]<(sound_rect2_alter[1]+173-SOUND_VOLUME)):
@@ -2113,9 +2172,8 @@ async def main():
                         pygame.mixer.music.set_volume(SOUND_VOLUME/100)
                         volume_redraw_alter2()
                 elif event.type == pygame.FINGERDOWN:
-                    if event.finger_id in down_fingers:
-                        continue
-                    down_fingers.append(event.finger_id)
+                    if event.finger_id not in down_fingers:
+                        down_fingers.append(event.finger_id)
                     if (event.x * screen.get_width())>20 and (event.x * screen.get_width())<90 and (event.y * screen.get_height())>20 and (event.y * screen.get_height())<70:
                         main_menu = True
                         leaderboard_screen = False
@@ -2211,6 +2269,50 @@ async def main():
                         alter_over = True
                         screen.blit(main_menu_bg,sound_alter_rect2,sound_alter_rect2)
                         volume_redraw2()
+        
+        if store_open:
+            pos = pygame.mouse.get_pos()
+            if (pos[0]>20 and pos[0]<90 and pos[1]>20 and pos[1]<70) or (left_store_rect.collidepoint(pos) and COLOR_OF_MAN!=COLORS[0]) or (right_store_rect.collidepoint(pos) and COLOR_OF_MAN!=COLORS[-1]):
+                pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_HAND)
+            else:
+                pygame.mouse.set_cursor(pygame.SYSTEM_CURSOR_ARROW)
+                
+            for event in events:
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.pos[0]>20 and event.pos[0]<90 and event.pos[1]>20 and event.pos[1]<70:
+                        main_menu = True
+                        leaderboard_screen = False
+                        game_running = False
+                        info = False
+                        store_open = False
+                        loading()
+                        hscore_thread = False
+                        main_page()
+                    elif left_store_rect.collidepoint(event.pos) and COLOR_OF_MAN!=COLORS[0]:
+                        left_store_pressed = True
+                        COLOR_OF_MAN = COLORS[COLORS.index(COLOR_OF_MAN)-1]
+                        store_page()
+                        pygame.time.set_timer(KEY_PRESSED_STORE,500,1)
+                    elif right_store_rect.collidepoint(event.pos) and COLOR_OF_MAN!=COLORS[-1]:
+                        right_store_pressed = True
+                        COLOR_OF_MAN = COLORS[COLORS.index(COLOR_OF_MAN)+1]
+                        store_page()
+                        pygame.time.set_timer(KEY_PRESSED_STORE,500,1)
+                elif event.type == KEY_PRESSED_STORE:
+                    left_store_pressed = False
+                    right_store_pressed = False
+                    store_page()
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_LEFT and COLOR_OF_MAN!=COLORS[0]:
+                        left_store_pressed = True
+                        COLOR_OF_MAN = COLORS[COLORS.index(COLOR_OF_MAN)-1]
+                        store_page()
+                        pygame.time.set_timer(KEY_PRESSED_STORE,500,1)
+                    elif event.key == pygame.K_RIGHT and COLOR_OF_MAN!=COLORS[-1]:
+                        right_store_pressed = True
+                        COLOR_OF_MAN = COLORS[COLORS.index(COLOR_OF_MAN)+1]
+                        store_page()
+                        pygame.time.set_timer(KEY_PRESSED_STORE,500,1)
 
         if info:
             pos = pygame.mouse.get_pos()
@@ -2270,8 +2372,6 @@ async def main():
                         loading()
                         reset()
                         if SOUND_PLAYING:
-                            PREV_SOUND_VOLUME = SOUND_VOLUME
-                            SOUND_VOLUME = 0
                             pygame.mixer.music.stop()
                             SOUND_PLAYING = False
                         await load_game()
@@ -2312,6 +2412,42 @@ async def main():
                         pygame.mixer.music.set_volume(SOUND_VOLUME/100)
                         volume_redraw_alter2()
                 elif event.type == pygame.FINGERDOWN:
+                    if alter_over and (sound_rect2.collidepoint(event.x * screen.get_width(),event.y * screen.get_height()) or mute_rect2.collidepoint(event.x * screen.get_width(),event.y * screen.get_height())):
+                        SOUND = not SOUND
+                        if SOUND and not SOUND_PLAYING:
+                            SOUND_PLAYING = True
+                            if SOUND_VOLUME==0:
+                                SOUND_VOLUME = PREV_SOUND_VOLUME
+                            pygame.mixer.music.set_volume(SOUND_VOLUME/100)
+                        elif not SOUND and SOUND_PLAYING:
+                            SOUND_PLAYING = False
+                            PREV_SOUND_VOLUME = SOUND_VOLUME
+                            SOUND_VOLUME = 0
+                            pygame.mixer.music.set_volume(0)
+                        volume_redraw2()
+                    elif (not alter_over and sound_rect2_alter.collidepoint(event.x * screen.get_width(),event.y * screen.get_height())) or (not alter_over and mute_rect2_alter.collidepoint(event.x * screen.get_width(),event.y * screen.get_height())):
+                        SOUND = not SOUND
+                        if SOUND and not SOUND_PLAYING:
+                            SOUND_PLAYING = True
+                            if SOUND_VOLUME==0:
+                                SOUND_VOLUME = PREV_SOUND_VOLUME
+                            pygame.mixer.music.set_volume(SOUND_VOLUME/100)
+                        elif not SOUND and SOUND_PLAYING:
+                            SOUND_PLAYING = False
+                            PREV_SOUND_VOLUME = SOUND_VOLUME
+                            SOUND_VOLUME = 0
+                            pygame.mixer.music.set_volume(0)
+                        volume_redraw_alter2()
+                    elif not alter_over and SOUND_RECT2.collidepoint(event.x * screen.get_width(), event.y * screen.get_height()):
+                        SOUND_VOLUME = (SOUND_RECT2[1]+SOUND_RECT2[3]) - (event.y * screen.get_height())
+                        if SOUND_VOLUME==0:
+                            SOUND = not SOUND
+                            SOUND_PLAYING = False
+                        else:
+                            SOUND = True
+                            SOUND_PLAYING = True
+                        pygame.mixer.music.set_volume(SOUND_VOLUME/100)
+                        volume_redraw_alter2()
                     if event.finger_id in down_fingers:
                         continue
                     down_fingers.append(event.finger_id)
@@ -2348,47 +2484,9 @@ async def main():
                         loading()
                         reset()
                         if SOUND_PLAYING:
-                            PREV_SOUND_VOLUME = SOUND_VOLUME
-                            SOUND_VOLUME = 0
                             pygame.mixer.music.stop()
                             SOUND_PLAYING = False
                         await load_game()
-                    elif alter_over and (sound_rect2.collidepoint(event.x * screen.get_width(),event.y * screen.get_height()) or mute_rect2.collidepoint(event.x * screen.get_width(),event.y * screen.get_height())):
-                        SOUND = not SOUND
-                        if SOUND and not SOUND_PLAYING:
-                            SOUND_PLAYING = True
-                            if SOUND_VOLUME==0:
-                                SOUND_VOLUME = PREV_SOUND_VOLUME
-                            pygame.mixer.music.set_volume(SOUND_VOLUME/100)
-                        elif not SOUND and SOUND_PLAYING:
-                            SOUND_PLAYING = False
-                            PREV_SOUND_VOLUME = SOUND_VOLUME
-                            SOUND_VOLUME = 0
-                            pygame.mixer.music.set_volume(0)
-                        volume_redraw2()
-                    elif (not alter_over and sound_rect2_alter.collidepoint(event.x * screen.get_width(),event.y * screen.get_height())) or (not alter_over and mute_rect2_alter.collidepoint(event.x * screen.get_width(),event.y * screen.get_height())):
-                        SOUND = not SOUND
-                        if SOUND and not SOUND_PLAYING:
-                            SOUND_PLAYING = True
-                            if SOUND_VOLUME==0:
-                                SOUND_VOLUME = PREV_SOUND_VOLUME
-                            pygame.mixer.music.set_volume(SOUND_VOLUME/100)
-                        elif not SOUND and SOUND_PLAYING:
-                            SOUND_PLAYING = False
-                            PREV_SOUND_VOLUME = SOUND_VOLUME
-                            SOUND_VOLUME = 0
-                            pygame.mixer.music.set_volume(0)
-                        volume_redraw_alter2()
-                    elif not alter_over and SOUND_RECT2.collidepoint(event.x * screen.get_width(), event.y * screen.get_height()):
-                        SOUND_VOLUME = (SOUND_RECT2[1]+SOUND_RECT2[3]) - (event.y * screen.get_height())
-                        if SOUND_VOLUME==0:
-                            SOUND = not SOUND
-                            SOUND_PLAYING = False
-                        else:
-                            SOUND = True
-                            SOUND_PLAYING = True
-                        pygame.mixer.music.set_volume(SOUND_VOLUME/100)
-                        volume_redraw_alter2()
                     
                     #finger motion
                     if (info_bg_rect_left.collidepoint(event.x * screen.get_width(), event.y * screen.get_height())) and ((still_man2 and on_page==1) or (still_man2 and on_page==2 and left_allowed)):
@@ -2532,7 +2630,6 @@ async def main():
                         screen.blit(main_menu_bg,sound_alter_rect2,sound_alter_rect2)
                         volume_redraw2()
 
-
         for event in events:
             if event.type == pygame.QUIT:
                 return
@@ -2549,6 +2646,7 @@ if __name__ == "__main__":
         platform.document.body.style.backgroundRepeat = "no-repeat"
         platform.document.body.style.backgroundPosition = "center"
     HIGH_SCORE = 0
+    LOGS_COLLECTED = 0
     score = 0
     random.seed(time.time())
     asyncio.run(main())
