@@ -16,7 +16,7 @@ import sys
 if getattr(sys, 'frozen', False):
     base_path = sys._MEIPASS
 else:
-    base_path = os.path.abspath(".")
+    base_path = "."
 
 if base_path not in sys.path:
     sys.path.insert(0, base_path)
@@ -29,6 +29,7 @@ os.makedirs(data_dir, exist_ok=True)
 
 application_allowed = True
 pygame.init()
+pygame.mixer.init()
 screen = pygame.display.set_mode((1000,667))
 pygame.display.set_caption(app_name)
 logo = pygame.image.load(os.path.join(base_path,"assets/logo.png"))
