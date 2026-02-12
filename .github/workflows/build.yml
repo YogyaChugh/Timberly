@@ -16,6 +16,6 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build the hello-docker Docker image
         run: |
-          docker build . -t ghcr.io/YogyaChugh/timberly:latest
-          docker run ghcr.io/YogyaChugh/timberly:latest
-          docker push ghcr.io/YogyaChugh/timberly:latest
+          docker build . -t timberly:latest
+          docker run timberly:latest
+          docker push timberly:latest
