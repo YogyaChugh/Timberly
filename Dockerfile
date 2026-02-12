@@ -1,33 +1,35 @@
 FROM python:3.11-slim
 
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    libsdl2-dev \
-    libsdl2-image-dev \
-    libsdl2-mixer-dev \
-    libsdl2-ttf-dev \
-    pkg-config \
-    libfreetype6-dev \
-    libffi-dev \
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update -o Acquire::ForceIPv4=true && \
+    apt-get install -y --no-install-recommends \
+    ca-certificates \
+    libglib2.0-0 \
+    libgthread-2.0-0 \
+    libsdl2-2.0-0 \
+    libsdl2-mixer-2.0-0 \
+    libsdl2-image-2.0-0 \
+    libsdl2-ttf-2.0-0 \
     libgl1 \
     libsm6 \
     libxext6 \
-    libxrender-dev \
+    libxrender1 \
     && rm -rf /var/lib/apt/lists/*
-
-COPY assets /Timberly/assets/
-COPY audio /Timberly/audio/
-COPY fonts /Timberly/fonts/
-COPY main.py /Timberly/
-COPY main.spec /Timberly/
-COPY requirements.txt /Timberly/
 
 WORKDIR /Timberly
 
-ENV XDG_RUNTIME_DIR=/tmp/runtime
+COPY assets assets/
+COPY audio audio/
+COPY fonts fonts/
+COPY main.py .
+COPY main.spec .
+COPY requirements.txt .
+
+RUN pip install --no-cache-dir -r requirements.txt
+
 ENV SDL_AUDIODRIVER=dummy
+ENV XDG_RUNTIME_DIR=/tmp/runtime
 RUN mkdir -p /tmp/runtime
 
-RUN pip3 install -r requirements.txt
-
-CMD ["python3","main.py"]
+CMD ["python3", "main.py"]

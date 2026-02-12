@@ -9,7 +9,6 @@ import requests
 from PIL import Image
 import asyncio
 import threading
-import cv2
 import sys
 
 
@@ -288,6 +287,14 @@ SOUND_RECT = pygame.Rect(sound_rect1_alter[0]+60,sound_rect1_alter[1]+20,100,sou
 SOUND_RECT2 = pygame.Rect(sound_rect2_alter[0]+20,sound_rect2_alter[1]+53,sound_rect2_alter[2]-40,100)
 
 
+
+# Exceptions
+
+class ServerException(Exception):
+    def __init__(self, message=""):
+        super().__init__(message)
+
+
 gif = Image.open(os.path.join(base_path,"assets/man.gif"))
 frames = []
 try:
@@ -309,6 +316,8 @@ def show_high_score():
     try:
         bb = requests.get("https://yogya.pythonanywhere.com/get_score",data={'id': USER_ID})
         # print(bb.content)
+        if bb.status_code!=200:
+            raise ServerException
         bro = pygame.Surface((370,60))
         bro.blit(main_menu_bg,(0,0),(20,10,370,60))
         if main_menu and online_game:
@@ -1228,20 +1237,8 @@ while True:
                     file.write(str({'ID': USER_ID, 'NAME': USER_NAME, 'HIGH SCORE': HIGH_SCORE}))
             if doit:
                 doit = False
-                try:
-                    # print(f'updated with {HIGH_SCORE}')
-                    t = requests.post("https://yogya.pythonanywhere.com/update_score",data={'id': USER_ID, 'score': HIGH_SCORE})
-                    if t.content == "":
-                        is_there_a_problem = True
-                        something = font2.render("Couldn't update score !",True,(0,0,0))
-                        screen.blit(something,(320,580))
-                        pygame.draw.rect(screen,(255,255,255),(600,580,80,35),border_radius=10)
-                        pygame.draw.rect(screen,(0,0,0),(600,580,80,35),3,10)
-                        retry = font2.render("Retry",True,(0,0,0))
-                        screen.blit(retry,(610,582))
-                        pygame.display.update()
-                except:
-                    # print("Couldn't update score")
+                t = requests.post("https://yogya.pythonanywhere.com/update_score",data={'id': USER_ID, 'score': HIGH_SCORE})
+                if t.status_code!=200 or t.content == "":
                     is_there_a_problem = True
                     something = font2.render("Couldn't update score !",True,(0,0,0))
                     screen.blit(something,(320,580))
@@ -1298,7 +1295,7 @@ while True:
                         screen.blit(something,(450,580))
                         pygame.display.update()
                         t = requests.post("https://yogya.pythonanywhere.com/update_score",data={'id': USER_ID, 'score': HIGH_SCORE})
-                        if t.content == "":
+                        if t.status_code!=200 or t.content == "":
                             is_there_a_problem = True
                             pygame.draw.rect(screen,(169,122,87),(320,580,360,35))
                             something = font2.render("Couldn't update score !",True,(0,0,0))

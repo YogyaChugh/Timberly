@@ -4,5 +4,4 @@ appdirs
 requests
 pillow
 asyncio
-opencv-python
 pyinstaller
