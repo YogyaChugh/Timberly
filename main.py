@@ -5,13 +5,13 @@ import time
 import webbrowser
 import appdirs
 import os
+import threading
 import requests
 from PIL import Image
 import asyncio
 import sys, platform
 import js
 import webbrowser
-from fetch import RequestHandler
 import pygame_textinput
 import pygame_vkeyboard as vkboard
 
@@ -1421,7 +1421,7 @@ while True:
                             screen.blit(text,(70,280))
                             screen.blit(text2,(70,330))
                             pygame.display.update()
-                            await asyncio.sleep(3)
+                            time.sleep(3)
                         info = True
                         if SOUND and not SOUND_PLAYING:
                             SOUND_PLAYING = True
