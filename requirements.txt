@@ -4,4 +4,6 @@ appdirs
 requests
 pillow
 asyncio
+js
+web-browser
 pyinstaller
