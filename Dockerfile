@@ -1,4 +1,4 @@
-FROM python:3.11-slim
+FROM python:3.12-slim
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -19,14 +19,15 @@ RUN apt-get update -o Acquire::ForceIPv4=true && \
 
 WORKDIR /Timberly
 
+
+COPY requirements.txt .
+
+RUN pip install --no-cache-dir -r requirements.txt
+
 COPY assets assets/
 COPY audio audio/
 COPY fonts fonts/
 COPY main.py .
-COPY main.spec .
-COPY requirements.txt .
-
-RUN pip install --no-cache-dir -r requirements.txt
 
 ENV SDL_AUDIODRIVER=dummy
 ENV XDG_RUNTIME_DIR=/tmp/runtime
